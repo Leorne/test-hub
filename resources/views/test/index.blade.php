@@ -11,11 +11,11 @@
                             {{ $test->title }}
                         </div>
                         <div class="card-body">
-                            Tags: <br>
+                            Tags:
                             @foreach($test->tags as $tag)
-                                <div>
-                                    {{ $tag->name }}
-                                </div>
+                                <span>
+                                    {{ $tag->name }},
+                                </span>
                             @endforeach
                         </div>
                     </div>

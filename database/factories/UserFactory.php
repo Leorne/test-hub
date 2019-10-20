@@ -34,14 +34,89 @@ $factory->define(App\Tag::class, function (Faker $faker) {
     ];
 });
 
+//TestTag factory
+$factory->define(App\TestTag::class, function (Faker $faker) {
+    return [
+        'test_id' => '',
+        'tag_id' => ''
+    ];
+});
 
 //Question factory
-$factory->define(App\TestQuestion::class, function (Faker $faker) {
-    $test = factory('App\Test')->create();
+$factory->define(App\Question::class, function (Faker $faker) {
     return [
-        'test_id' => $test->id,
+        'test_id' => '',
         'question_body' => $faker->text,
         'question_type' => '',
-        'question_points' => $faker->numberBetween(1,10)
+        'question_points' => $faker->numberBetween(1, 10),
+    ];
+});
+
+
+
+
+//Answer factory
+$factory->defineAs(App\Answer::class, 'one_answer', function (Faker $faker) {
+    $data = [
+        'body' => $faker->word,
+        'correct' => null
+    ];
+    return [
+        'question_id' => '',
+        'answer_data' => $data,
+    ];
+});
+
+$factory->defineAs(App\Answer::class, 'one_answer.correct', function (Faker $faker){
+    $data = [
+        'body' => $faker->word,
+        'correct' => 1
+    ];
+    return [
+        'question_id' => '',
+        'answer_data' => $data,
+    ];
+});
+
+$factory->defineAs(App\Answer::class, 'many_answers', function (Faker $faker) {
+    $data = [
+        'body' => $faker->word,
+        'correct' => null,
+    ];
+    return [
+        'question_id' => '',
+        'answer_data' => $data,
+    ];
+});
+
+$factory->defineAs(App\Answer::class, 'many_answers.correct', function (Faker $faker) {
+    $data = [
+        'body' => $faker->word,
+        'correct' => 1,
+    ];
+    return [
+        'question_id' => '',
+        'answer_data' => $data,
+    ];
+});
+
+$factory->defineAs(App\Answer::class, 'input_number', function (Faker $faker) {
+    $data = [
+        'correct' => $faker->numberBetween(0,2020),
+        'error_range' => null
+    ];
+    return [
+        'question_id' => '',
+        'answer_data' => $data,
+    ];
+});
+
+$factory->defineAs(App\Answer::class, 'input_string', function (Faker $faker) {
+    $data = [
+        'correct' => $faker->word,
+    ];
+    return [
+        'question_id' => '',
+        'answer_data' => $data,
     ];
 });

@@ -33,7 +33,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <a class="nav-link" href="{{ route('test.index') }}">All Tests</a>
+                        <a class="nav-link" href="{{ route('test.create') }}">New Test</a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

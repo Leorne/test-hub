@@ -6,9 +6,9 @@ Auth::routes();
 //    return view('welcome');
 //})->name('main');
 
-Route::get('/', 'TestController@index')->name('main');
+Route::get('/', 'TestController@index')->name('test');
 
-Route::get('/tests', 'TestsController@index')->name('test.index');
+Route::get('/tests', 'TestController@index')->name('test.index');
 
 Route::get('/new', 'TestController@create')->name('test.create');
 Route::post('/new', 'TestController@store')->name('test.store');

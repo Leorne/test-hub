@@ -7,8 +7,13 @@
 
                 @foreach($tests as $test)
                     <div class="card my-2">
-                        <div class="card-header">
-                            {{ $test->title }}
+                        <div class="card-header" style="display: flex">
+                            <div class="" style="flex: 1">
+                                {{ $test->title }}
+                            </div>
+                            <div class="text-right" style="flex: 1">
+                                <a class="btn btn-primary" href="{{ route('test.show', $test->id) }}">Try to pass</a>
+                            </div>
                         </div>
                         <div class="card-body">
                             Tags:

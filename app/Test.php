@@ -11,7 +11,7 @@ class Test extends Model
 
     public function questions()
     {
-        return $this->hasMany(TestQuestion::class);
+        return $this->hasMany(Question::class);
     }
 
     public function tags()

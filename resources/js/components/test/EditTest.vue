@@ -2,8 +2,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 py-3">
-                <div class="card p-3">
-                    <form>
+                <form>
+                    <div class="card p-3 m-2">
                         <div class="form-group">
                             <label for="title">Test title</label>
                             <input name="title" type="text" class="form-control" id="title"
@@ -41,15 +41,25 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <new-question></new-question>
+
+                    <div class="card text-center my-3">
+                        <input type="submit" class="btn btn-primary" name="submit" value="Create test.">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
+    import NewQuestion from './NewQuestion'
     export default {
+        components: { NewQuestion },
+
         data() {
             return {
                 timerEnable: false,

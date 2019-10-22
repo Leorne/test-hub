@@ -7,13 +7,13 @@
                         <div class="form-group">
                             <label for="title">Test title</label>
                             <input name="title" type="text" class="form-control" id="title"
-                                   placeholder="Enter test title" required>
-                            <small id="emailHelp" class="form-text text-muted">This field is required.</small>
+                                   placeholder="Enter test title" required v-model="testTitle">
+                            <small class="form-text text-muted">This field is required.</small>
                         </div>
                         <div class="form-group">
                             <label for="about">About this test</label>
                             <textarea name="about" class="form-control" id="about" rows="6"
-                                      placeholder="Here you can describe this test">
+                                      placeholder="Here you can describe this test" v-model="testAbout">
                             </textarea>
                         </div>
                         <div class="form-row text-center">
@@ -42,8 +42,15 @@
                             </div>
                         </div>
                     </div>
-
-                    <new-question></new-question>
+                    <div class="card" v-for="(question, index) in questions">
+                        <div class="card-header">
+                            {{ question['question_body'] }}
+                        </div>
+                        <div class="card-body">
+                            ANSWERS COMPONENT
+                        </div>
+                    </div>
+                    <new-question @create="addQuestion"></new-question>
 
                     <div class="card text-center my-3">
                         <input type="submit" class="btn btn-primary" name="submit" value="Create test.">
@@ -62,9 +69,18 @@
 
         data() {
             return {
+                testTitle: null,
+                testAbout: null,
                 timerEnable: false,
-                timer: '00:30:00'
+                timer: '00:30:00',
+                questions: []
             }
         },
+
+        methods: {
+            addQuestion(question) {
+                this.questions.push(question)
+            },
+        }
     }
 </script>

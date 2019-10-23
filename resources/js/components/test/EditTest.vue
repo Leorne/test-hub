@@ -42,16 +42,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" v-for="(question, index) in questions">
-                        <div class="card-header">
-                            {{ question['question_body'] }}
-                        </div>
-                        <div class="card-body">
-                            ANSWERS COMPONENT
+                    <div v-for="(question, index) in questions">
+                        <show-question :question="question"></show-question>
+                    </div>
+                    <div class="card text-center">
+                        <span class="btn btn-secondary" @click="creating = true">New question.</span>
+                        <div>
+                            <edit-question v-if="creating"
+                                           @create="addQuestion"
+                                           @edit="editQuestion"
+                                           @close="creating = !creating">
+                            </edit-question>
                         </div>
                     </div>
-                    <new-question @create="addQuestion"></new-question>
-
                     <div class="card text-center my-3">
                         <input type="submit" class="btn btn-primary" name="submit" value="Create test.">
                     </div>
@@ -63,12 +66,15 @@
 
 <script>
 
-    import NewQuestion from './NewQuestion'
+    import EditQuestion from './question/EditQuestion'
+    import ShowQuestion from './question/ShowQuestion'
+
     export default {
-        components: { NewQuestion },
+        components: { EditQuestion, ShowQuestion },
 
         data() {
             return {
+                creating: false,
                 testTitle: null,
                 testAbout: null,
                 timerEnable: false,
@@ -79,8 +85,13 @@
 
         methods: {
             addQuestion(question) {
-                this.questions.push(question)
+                this.questions.push(question);
+                this.creating = false;
             },
+
+            editQuestion(question){
+                console.log(question);
+            }
         }
     }
 </script>

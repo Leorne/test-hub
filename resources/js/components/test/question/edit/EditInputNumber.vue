@@ -41,7 +41,10 @@
         methods: {
             answersIsReady() {
                 if (this.validate()) {
-                    this.$emit('ready', [this.answer, this.error_range], 'input_number');
+                    this.$emit('ready',
+                        {answer: this.answer,
+                         error_range: this.error_range},
+                        'input_number');
 
 
                     this.answer = null;

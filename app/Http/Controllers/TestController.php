@@ -36,7 +36,20 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+           'title' => 'required|max:255',
+            'about' => 'string|nullable',
+            'questions' => 'required',
+            'timer' => 'integer|max:180|nullable',
+            'ful_result' => 'boolean'
+        ]);
+
+//        $test = Test::create([
+//            'title' => $request->input('title'),
+//            'about' => $request->input('about'),
+//            'timer' => $request->input('timer'),
+//            'ful_result' => $request->input('ful_result'),
+//        ]);
     }
 
     /**

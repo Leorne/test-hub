@@ -24,7 +24,10 @@
             +
         </div>
         <div class="d-flex justify-content-between align-items-start m-2">
-            <div class="btn btn-success" @click="answersIsReady">
+            <div class="btn btn-primary" v-if="this.$parent.editing" @click="answersIsReady">
+                Edit
+            </div>
+            <div class="btn btn-success" v-else @click="answersIsReady">
                 Add question
             </div>
             <div class="btn btn-danger" @click="$emit('close')">
@@ -40,7 +43,7 @@
 
 <script>
     export default {
-        props: ['answersOld'],
+        props: ['data'],
 
         data() {
             return {
@@ -54,10 +57,10 @@
         },
 
         created() {
-            if (this.answersOld) {
-                Object.assign(this.answers, this.answersOld);
-                this.countAnswers = this.answersOld.length;
-                this.answersOld.forEach((answer) => {
+            if (this.data) {
+                this.answers = JSON.parse(JSON.stringify(this.data));
+                this.countAnswers = this.data.length;
+                this.data.forEach((answer) => {
                     if (answer.correct) {
                         this.countCorrect++;
                     }

@@ -20,7 +20,10 @@
             </div>
         </div>
         <div class="d-flex justify-content-between align-items-start m-2">
-            <div class="btn btn-success" @click="answersIsReady">
+            <div class="btn btn-primary" v-if="this.$parent.editing" @click="answersIsReady">
+                Edit
+            </div>
+            <div class="btn btn-success" v-else @click="answersIsReady">
                 Add question
             </div>
             <div class="btn btn-danger" @click="$emit('close')">
@@ -36,6 +39,7 @@
 
 <script>
     export default {
+        props: ['data'],
 
         data() {
             return {
@@ -43,6 +47,13 @@
                 countAnswers: 0,
                 maxCountAnswers: 10,
                 errors: [],
+            }
+        },
+
+        created() {
+            if (this.data) {
+                this.answers = JSON.parse(JSON.stringify(this.data));
+                this.countAnswers = this.data.length;
             }
         },
 
@@ -65,12 +76,6 @@
             answersIsReady() {
                 if (this.validate()) {
                     this.$emit('ready', this.answers, 'input_string');
-
-                    this.answers = [];
-                    this.countAnswers = 0;
-                    this.maxCountAnswers = 10;
-                    this.errors = [];
-
                 } else {
                     setTimeout(() => this.errors = [], 10000);
                 }

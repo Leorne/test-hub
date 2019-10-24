@@ -6,10 +6,10 @@
                 <div>
                     <span class="badge badge-primary badge-pill">{{ questionPoints }}</span>
                     <span class="btn btn-primary btn-sm" @click="editing = true">Edit</span>
-                    <span class="btn btn-danger btn-sm" @click="$emit('delete')">X</span>
+                    <span class="btn btn-danger btn-sm" @click="deleteQuestion">X</span>
                 </div>
             </li>
-            <component :is="this.typesComponent[this.questionType]" :showData="answerData"></component>
+            <component :is="this.typesComponent[this.questionType]" :data="answerData"></component>
         </div>
         <edit-question v-if="editing"
                        :data="this.question"
@@ -29,7 +29,7 @@
     export default {
         components: {ShowAnswers, ShowInputNumber, ShowInputString, EditQuestion},
 
-        props: ['question'],
+        props: ['question', 'index'],
 
         data() {
             return {
@@ -41,26 +41,32 @@
                     'input_string': 'ShowInputString'
                 },
 
-                questionType: '',
-                questionPoints: null,
-                questionBody: null,
-                answerData: [],
-
+                questionBody: this.question.question_body,
+                questionPoints: this.question.question_points,
+                questionType: this.question.question_type,
+                answerData: this.question.answer_data,
             }
         },
 
-        created() {
-            this.questionBody = this.question.question_body;
-            this.questionPoints = this.question.question_points;
-            this.questionType = this.question.question_type;
-            this.answerData = this.question.answer_data;
+
+        watch: {
+            question(changed){
+                this.questionBody = changed.question_body;
+                this.questionPoints = changed.question_points;
+                this.questionType = changed.question_type;
+                this.answerData = changed.answer_data;
+            },
         },
 
         methods: {
             editQuestion(editedQuestion) {
+                this.$emit('edit', editedQuestion, this.index);
                 this.editing = false;
-                this.$emit('edit', editedQuestion);
             },
+
+            deleteQuestion(){
+                this.$emit('delete', this.index);
+            }
         }
     }
 </script>

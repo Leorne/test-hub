@@ -1,7 +1,12 @@
 <template>
     <div>
-        <li class="list-group-item mx-4">
-            {{ answer }}
+        <li class="list-group-item mx-4  d-flex justify-content-between align-items-center">
+            <span>
+                {{ answer }}
+            </span>
+            <span>
+                &#177 {{ error_range }}
+            </span>
         </li>
     </div>
 </template>

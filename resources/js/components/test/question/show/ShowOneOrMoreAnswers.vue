@@ -8,7 +8,7 @@
 
 <script>
     export default {
-        props: ['showData'],
+        props: ['data'],
 
         data() {
             return {
@@ -17,7 +17,13 @@
         },
 
         created() {
-            this.answers = this.showData;
+            this.answers = this.data;
+        },
+
+        watch: {
+            data(changed) {
+                this.answers = changed;
+            }
         }
     }
 </script>

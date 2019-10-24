@@ -38,8 +38,8 @@
                     <div class="p-2">
                         <div class="form-group">
                             <label for="question_types">Choose the question type</label>
-                            <select class="form-control" id="question_types" v-model="currentType">
-                                <option v-for="type in types">{{ type }}</option>
+                            <select class="form-control" id="question_types" v-model="currentTypeName">
+                                <option v-for="(value, name) in typesComponent">{{ value }}</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -55,7 +55,7 @@
                         </div>
                         <div>
                             <component :is="answerComponent"
-                                       :answersOld="answer_data"
+                                       :data="answer_data"
                                        @ready="setAnswerData"
                                        @close="$emit('close')">
                             </component>
@@ -85,7 +85,18 @@
             return {
                 editing: false,
                 types: ['One or more answers', 'Input number', 'Input string'],
-                currentType: 'One or more answers',
+                editTypesComponent: {
+                    'one_answer': 'EditAnswers',
+                    'many_answers': 'EditAnswers',
+                    'input_number': 'EditInputNumber',
+                    'input_string': 'EditInputString'
+                },
+                typesComponent: {
+                    'EditAnswers': 'One or more answers',
+                    'EditInputNumber': 'Input number',
+                    'EditInputString': 'Input string'
+                },
+                currentTypeName: 'One or more answers',
                 answerComponent: 'EditAnswers',
 
                 errors: [],
@@ -107,13 +118,22 @@
                 this.type = this.data.question_type;
                 this.answer_data = this.data.answer_data;
                 this.editing = true;
+                this.answerComponent = this.editTypesComponent[this.data.question_type];
+                this.currentTypeName = this.typesComponent[this.answerComponent];
             }
         },
 
         watch: {
-            currentType() {
+            currentTypeName() {
                 let components = ['EditAnswers', 'EditInputNumber', 'EditInputString'];
-                this.answerComponent = components[this.types.indexOf(this.currentType)]
+                this.answerComponent = components[this.types.indexOf(this.currentTypeName)];
+                if(this.editing){
+                    if(this.editTypesComponent[this.data.question_type] === this.answerComponent){
+                        this.answer_data = this.data.answer_data;
+                    }else{
+                        this.answer_data = null;
+                    }
+                }
             },
         },
 

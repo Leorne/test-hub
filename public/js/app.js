@@ -1906,6 +1906,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1915,21 +1923,59 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      creating: false,
+      creatingQuestion: false,
+      errors: [],
       testTitle: null,
       testAbout: null,
+      timer: null,
       timerEnable: false,
-      timer: '00:30:00',
+      ful_result: false,
       questions: []
     };
   },
   methods: {
     addQuestion: function addQuestion(question) {
       this.questions.push(question);
-      this.creating = false;
+      this.creatingQuestion = false;
     },
-    editQuestion: function editQuestion(question) {
-      console.log(question);
+    editQuestion: function editQuestion(question, index) {
+      Vue.set(this.questions, index, question);
+    },
+    deleteQuestion: function deleteQuestion(index) {
+      this.questions.splice(index, 1);
+    },
+    readyToCreate: function readyToCreate() {
+      var _this = this;
+
+      if (this.validate()) {
+        axios.post('/new', {
+          title: this.testTitle,
+          about: this.testAbout,
+          timer: this.timer,
+          ful_result: this.ful_result,
+          questions: this.questions
+        });
+      } else {
+        setTimeout(function () {
+          return _this.errors = [];
+        }, 10000);
+      }
+    },
+    validate: function validate() {
+      this.errors = [];
+      var isValid = true;
+
+      if (!this.testTitle) {
+        this.errors.push('Title is required field!');
+        isValid = false;
+      }
+
+      if (this.questions.length < 1) {
+        this.errors.push('Your must contain at least one question!');
+        isValid = false;
+      }
+
+      return isValid;
     }
   }
 });
@@ -2035,7 +2081,18 @@ __webpack_require__.r(__webpack_exports__);
     return {
       editing: false,
       types: ['One or more answers', 'Input number', 'Input string'],
-      currentType: 'One or more answers',
+      editTypesComponent: {
+        'one_answer': 'EditAnswers',
+        'many_answers': 'EditAnswers',
+        'input_number': 'EditInputNumber',
+        'input_string': 'EditInputString'
+      },
+      typesComponent: {
+        'EditAnswers': 'One or more answers',
+        'EditInputNumber': 'Input number',
+        'EditInputString': 'Input string'
+      },
+      currentTypeName: 'One or more answers',
       answerComponent: 'EditAnswers',
       errors: [],
       //question
@@ -2053,12 +2110,22 @@ __webpack_require__.r(__webpack_exports__);
       this.type = this.data.question_type;
       this.answer_data = this.data.answer_data;
       this.editing = true;
+      this.answerComponent = this.editTypesComponent[this.data.question_type];
+      this.currentTypeName = this.typesComponent[this.answerComponent];
     }
   },
   watch: {
-    currentType: function currentType() {
+    currentTypeName: function currentTypeName() {
       var components = ['EditAnswers', 'EditInputNumber', 'EditInputString'];
-      this.answerComponent = components[this.types.indexOf(this.currentType)];
+      this.answerComponent = components[this.types.indexOf(this.currentTypeName)];
+
+      if (this.editing) {
+        if (this.editTypesComponent[this.data.question_type] === this.answerComponent) {
+          this.answer_data = this.data.answer_data;
+        } else {
+          this.answer_data = null;
+        }
+      }
     }
   },
   methods: {
@@ -2135,7 +2202,7 @@ __webpack_require__.r(__webpack_exports__);
     ShowInputString: _show_ShowInputString__WEBPACK_IMPORTED_MODULE_2__["default"],
     EditQuestion: _EditQuestion__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
-  props: ['question'],
+  props: ['question', 'index'],
   data: function data() {
     return {
       editing: false,
@@ -2145,22 +2212,27 @@ __webpack_require__.r(__webpack_exports__);
         'input_number': 'ShowInputNumber',
         'input_string': 'ShowInputString'
       },
-      questionType: '',
-      questionPoints: null,
-      questionBody: null,
-      answerData: []
+      questionBody: this.question.question_body,
+      questionPoints: this.question.question_points,
+      questionType: this.question.question_type,
+      answerData: this.question.answer_data
     };
   },
-  created: function created() {
-    this.questionBody = this.question.question_body;
-    this.questionPoints = this.question.question_points;
-    this.questionType = this.question.question_type;
-    this.answerData = this.question.answer_data;
+  watch: {
+    question: function question(changed) {
+      this.questionBody = changed.question_body;
+      this.questionPoints = changed.question_points;
+      this.questionType = changed.question_type;
+      this.answerData = changed.answer_data;
+    }
   },
   methods: {
     editQuestion: function editQuestion(editedQuestion) {
+      this.$emit('edit', editedQuestion, this.index);
       this.editing = false;
-      this.$emit('edit', editedQuestion);
+    },
+    deleteQuestion: function deleteQuestion() {
+      this.$emit('delete', this.index);
     }
   }
 });
@@ -2205,13 +2277,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['data'],
   data: function data() {
     return {
       answer: null,
       error_range: null,
       errors: []
     };
+  },
+  created: function created() {
+    if (this.data) {
+      this.answer = this.data.answer;
+      this.error_range = this.data.error_range;
+    }
   },
   methods: {
     answersIsReady: function answersIsReady() {
@@ -2222,9 +2304,6 @@ __webpack_require__.r(__webpack_exports__);
           answer: this.answer,
           error_range: this.error_range
         }, 'input_number');
-        this.answer = null;
-        this.error_range = null;
-        this.errors = [];
       } else {
         setTimeout(function () {
           return _this.errors = [];
@@ -2292,7 +2371,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['data'],
   data: function data() {
     return {
       answers: [],
@@ -2300,6 +2383,12 @@ __webpack_require__.r(__webpack_exports__);
       maxCountAnswers: 10,
       errors: []
     };
+  },
+  created: function created() {
+    if (this.data) {
+      this.answers = JSON.parse(JSON.stringify(this.data));
+      this.countAnswers = this.data.length;
+    }
   },
   methods: {
     addAnswer: function addAnswer() {
@@ -2320,10 +2409,6 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.validate()) {
         this.$emit('ready', this.answers, 'input_string');
-        this.answers = [];
-        this.countAnswers = 0;
-        this.maxCountAnswers = 10;
-        this.errors = [];
       } else {
         setTimeout(function () {
           return _this.errors = [];
@@ -2424,8 +2509,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['answersOld'],
+  props: ['data'],
   data: function data() {
     return {
       answers: [],
@@ -2438,10 +2526,10 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    if (this.answersOld) {
-      Object.assign(this.answers, this.answersOld);
-      this.countAnswers = this.answersOld.length;
-      this.answersOld.forEach(function (answer) {
+    if (this.data) {
+      this.answers = JSON.parse(JSON.stringify(this.data));
+      this.countAnswers = this.data.length;
+      this.data.forEach(function (answer) {
         if (answer.correct) {
           _this.countCorrect++;
         }
@@ -2544,6 +2632,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['data'],
   data: function data() {
@@ -2609,14 +2702,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['showData'],
+  props: ['data'],
   data: function data() {
     return {
       answers: []
     };
   },
   created: function created() {
-    this.answers = this.showData;
+    this.answers = this.data;
+  },
+  watch: {
+    data: function data(changed) {
+      this.answers = changed;
+    }
   }
 });
 
@@ -38599,8 +38697,7 @@ var render = function() {
                     name: "title",
                     type: "text",
                     id: "title",
-                    placeholder: "Enter test title",
-                    required: ""
+                    placeholder: "Enter test title"
                   },
                   domProps: { value: _vm.testTitle },
                   on: {
@@ -38652,7 +38749,65 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-row text-center" }, [
-                _vm._m(0),
+                _c("div", { staticClass: "col-5 border p-0 ml-1 mr-auto" }, [
+                  _c(
+                    "div",
+                    { staticClass: "custom-control custom-checkbox m-1" },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.ful_result,
+                            expression: "ful_result"
+                          }
+                        ],
+                        staticClass: "custom-control-input",
+                        attrs: { type: "checkbox", id: "detailInfo" },
+                        domProps: {
+                          checked: Array.isArray(_vm.ful_result)
+                            ? _vm._i(_vm.ful_result, null) > -1
+                            : _vm.ful_result
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.ful_result,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 && (_vm.ful_result = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (_vm.ful_result = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
+                            } else {
+                              _vm.ful_result = $$c
+                            }
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "custom-control-label",
+                          attrs: { for: "detailInfo" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Test person can see the detailed result?\n                                "
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-5 border mr-1 ml-auto" }, [
                   _c(
@@ -38672,8 +38827,7 @@ var render = function() {
                         attrs: {
                           type: "checkbox",
                           value: "",
-                          id: "timerEnable",
-                          required: ""
+                          id: "timerEnable"
                         },
                         domProps: {
                           checked: Array.isArray(_vm.timerEnable)
@@ -38681,6 +38835,9 @@ var render = function() {
                             : _vm.timerEnable
                         },
                         on: {
+                          click: function($event) {
+                            _vm.timerEnable ? (_vm.timer = null) : ""
+                          },
                           change: function($event) {
                             var $$a = _vm.timerEnable,
                               $$el = $event.target,
@@ -38732,15 +38889,6 @@ var render = function() {
                       staticClass: "form-check m-1"
                     },
                     [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "form-check-label",
-                          attrs: { for: "timer" }
-                        },
-                        [_vm._v("Timer")]
-                      ),
-                      _vm._v(" "),
                       _c("input", {
                         directives: [
                           {
@@ -38751,10 +38899,12 @@ var render = function() {
                           }
                         ],
                         attrs: {
-                          type: "time",
+                          type: "number",
+                          min: "0",
+                          max: "180",
                           name: "timer",
                           id: "timer",
-                          step: "2"
+                          step: "0.5"
                         },
                         domProps: { value: _vm.timer },
                         on: {
@@ -38765,7 +38915,11 @@ var render = function() {
                             _vm.timer = $event.target.value
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _c("small", { staticClass: "form-text text-muted" }, [
+                        _vm._v("180 minute is maximum.")
+                      ])
                     ]
                   )
                 ])
@@ -38775,7 +38929,12 @@ var render = function() {
             _vm._l(_vm.questions, function(question, index) {
               return _c(
                 "div",
-                [_c("show-question", { attrs: { question: question } })],
+                [
+                  _c("show-question", {
+                    attrs: { question: question, index: index },
+                    on: { edit: _vm.editQuestion, delete: _vm.deleteQuestion }
+                  })
+                ],
                 1
               )
             }),
@@ -38787,7 +38946,7 @@ var render = function() {
                   staticClass: "btn btn-secondary",
                   on: {
                     click: function($event) {
-                      _vm.creating = true
+                      _vm.creatingQuestion = true
                     }
                   }
                 },
@@ -38797,13 +38956,12 @@ var render = function() {
               _c(
                 "div",
                 [
-                  _vm.creating
+                  _vm.creatingQuestion
                     ? _c("edit-question", {
                         on: {
                           create: _vm.addQuestion,
-                          edit: _vm.editQuestion,
                           close: function($event) {
-                            _vm.creating = !_vm.creating
+                            _vm.creatingQuestion = !_vm.creatingQuestion
                           }
                         }
                       })
@@ -38813,7 +38971,26 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm._m(1)
+            _c("div", { staticClass: "card text-center my-3" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "btn btn-primary",
+                  on: { click: _vm.readyToCreate }
+                },
+                [_vm._v("Create Test.")]
+              )
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.errors, function(error) {
+              return _c("div", { staticClass: "alert alert-danger" }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(error) +
+                    "\n                "
+                )
+              ])
+            })
           ],
           2
         )
@@ -38821,42 +38998,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-5 border p-0 ml-1 mr-auto" }, [
-      _c("div", { staticClass: "custom-control custom-checkbox m-1" }, [
-        _c("input", {
-          staticClass: "custom-control-input",
-          attrs: { type: "checkbox", value: "", id: "detailInfo", required: "" }
-        }),
-        _vm._v(" "),
-        _c(
-          "label",
-          { staticClass: "custom-control-label", attrs: { for: "detailInfo" } },
-          [
-            _vm._v(
-              "\n                                    Test person can see the detailed result?\n                                "
-            )
-          ]
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card text-center my-3" }, [
-      _c("input", {
-        staticClass: "btn btn-primary",
-        attrs: { type: "submit", name: "submit", value: "Create test." }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -38895,8 +39037,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.currentType,
-                      expression: "currentType"
+                      value: _vm.currentTypeName,
+                      expression: "currentTypeName"
                     }
                   ],
                   staticClass: "form-control",
@@ -38911,14 +39053,14 @@ var render = function() {
                           var val = "_value" in o ? o._value : o.value
                           return val
                         })
-                      _vm.currentType = $event.target.multiple
+                      _vm.currentTypeName = $event.target.multiple
                         ? $$selectedVal
                         : $$selectedVal[0]
                     }
                   }
                 },
-                _vm._l(_vm.types, function(type) {
-                  return _c("option", [_vm._v(_vm._s(type))])
+                _vm._l(_vm.typesComponent, function(value, name) {
+                  return _c("option", [_vm._v(_vm._s(value))])
                 }),
                 0
               )
@@ -38998,7 +39140,7 @@ var render = function() {
               [
                 _c(_vm.answerComponent, {
                   tag: "component",
-                  attrs: { answersOld: _vm.answer_data },
+                  attrs: { data: _vm.answer_data },
                   on: {
                     ready: _vm.setAnswerData,
                     close: function($event) {
@@ -39087,11 +39229,7 @@ var render = function() {
                   "span",
                   {
                     staticClass: "btn btn-danger btn-sm",
-                    on: {
-                      click: function($event) {
-                        return _vm.$emit("delete")
-                      }
-                    }
+                    on: { click: _vm.deleteQuestion }
                   },
                   [_vm._v("X")]
                 )
@@ -39101,7 +39239,7 @@ var render = function() {
           _vm._v(" "),
           _c(this.typesComponent[this.questionType], {
             tag: "component",
-            attrs: { showData: _vm.answerData }
+            attrs: { data: _vm.answerData }
           })
         ],
         1
@@ -39211,14 +39349,23 @@ var render = function() {
         "div",
         { staticClass: "d-flex justify-content-between align-items-start m-2" },
         [
-          _c(
-            "div",
-            {
-              staticClass: "btn btn-success",
-              on: { click: _vm.answersIsReady }
-            },
-            [_vm._v("\n            Add question\n        ")]
-          ),
+          this.$parent.editing
+            ? _c(
+                "div",
+                {
+                  staticClass: "btn btn-primary",
+                  on: { click: _vm.answersIsReady }
+                },
+                [_vm._v("\n            Edit\n        ")]
+              )
+            : _c(
+                "div",
+                {
+                  staticClass: "btn btn-success",
+                  on: { click: _vm.answersIsReady }
+                },
+                [_vm._v("\n            Add question\n        ")]
+              ),
           _vm._v(" "),
           _c(
             "div",
@@ -39350,14 +39497,23 @@ var render = function() {
         "div",
         { staticClass: "d-flex justify-content-between align-items-start m-2" },
         [
-          _c(
-            "div",
-            {
-              staticClass: "btn btn-success",
-              on: { click: _vm.answersIsReady }
-            },
-            [_vm._v("\n            Add question\n        ")]
-          ),
+          this.$parent.editing
+            ? _c(
+                "div",
+                {
+                  staticClass: "btn btn-primary",
+                  on: { click: _vm.answersIsReady }
+                },
+                [_vm._v("\n            Edit\n        ")]
+              )
+            : _c(
+                "div",
+                {
+                  staticClass: "btn btn-success",
+                  on: { click: _vm.answersIsReady }
+                },
+                [_vm._v("\n            Add question\n        ")]
+              ),
           _vm._v(" "),
           _c(
             "div",
@@ -39532,14 +39688,23 @@ var render = function() {
         "div",
         { staticClass: "d-flex justify-content-between align-items-start m-2" },
         [
-          _c(
-            "div",
-            {
-              staticClass: "btn btn-success",
-              on: { click: _vm.answersIsReady }
-            },
-            [_vm._v("\n            Add question\n        ")]
-          ),
+          this.$parent.editing
+            ? _c(
+                "div",
+                {
+                  staticClass: "btn btn-primary",
+                  on: { click: _vm.answersIsReady }
+                },
+                [_vm._v("\n            Edit\n        ")]
+              )
+            : _c(
+                "div",
+                {
+                  staticClass: "btn btn-success",
+                  on: { click: _vm.answersIsReady }
+                },
+                [_vm._v("\n            Add question\n        ")]
+              ),
           _vm._v(" "),
           _c(
             "div",
@@ -39590,9 +39755,22 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("li", { staticClass: "list-group-item mx-4" }, [
-      _vm._v("\n        " + _vm._s(_vm.answer) + "\n    ")
-    ])
+    _c(
+      "li",
+      {
+        staticClass:
+          "list-group-item mx-4  d-flex justify-content-between align-items-center"
+      },
+      [
+        _c("span", [
+          _vm._v("\n            " + _vm._s(_vm.answer) + "\n        ")
+        ]),
+        _vm._v(" "),
+        _c("span", [
+          _vm._v("\n            ± " + _vm._s(_vm.error_range) + "\n        ")
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []

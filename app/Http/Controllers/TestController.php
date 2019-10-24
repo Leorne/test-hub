@@ -41,15 +41,15 @@ class TestController extends Controller
             'about' => 'string|nullable',
             'questions' => 'required',
             'timer' => 'integer|max:180|nullable',
-            'ful_result' => 'boolean'
+            'full_result' => 'boolean'
         ]);
 
-//        $test = Test::create([
-//            'title' => $request->input('title'),
-//            'about' => $request->input('about'),
-//            'timer' => $request->input('timer'),
-//            'ful_result' => $request->input('ful_result'),
-//        ]);
+        $test = Test::create([
+            'title' => $request->input('title'),
+            'about' => $request->input('about'),
+            'timer' => $request->input('timer'),
+            'full_result' => $request->input('ful_result'),
+        ]);
     }
 
     /**

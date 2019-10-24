@@ -19,7 +19,7 @@
                         <div class="form-row text-center">
                             <div class="col-5 border p-0 ml-1 mr-auto">
                                 <div class="custom-control custom-checkbox m-1">
-                                    <input class="custom-control-input" type="checkbox" v-model="ful_result"
+                                    <input class="custom-control-input" type="checkbox" v-model="full_result"
                                            id="detailInfo">
                                     <label class="custom-control-label" for="detailInfo">
                                         Test person can see the detailed result?
@@ -89,7 +89,7 @@
                 testAbout: null,
                 timer: null,
                 timerEnable: false,
-                ful_result: false,
+                full_result: false,
                 questions: []
             }
         },
@@ -114,7 +114,7 @@
                         title: this.testTitle,
                         about: this.testAbout,
                         timer: this.timer,
-                        ful_result: this.ful_result,
+                        full_result: this.full_result,
                         questions: this.questions
                     });
                 } else {

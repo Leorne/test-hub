@@ -29,7 +29,7 @@ $factory->define(App\Test::class, function (Faker $faker) {
 //Tag factory
 $factory->define(App\Tag::class, function (Faker $faker) {
     return [
-        'name' => $faker->word,
+        'value' => $faker->word,
         'approved' => true
     ];
 });

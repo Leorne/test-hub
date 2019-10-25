@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Answer;
+use App\Question;
+use App\Tag;
 use App\Test;
+use App\TestTag;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -44,12 +48,46 @@ class TestController extends Controller
             'full_result' => 'boolean'
         ]);
 
+        //Create test data
         $test = Test::create([
             'title' => $request->input('title'),
             'about' => $request->input('about'),
             'timer' => $request->input('timer'),
             'full_result' => $request->input('ful_result'),
         ]);
+
+        //Create tags data
+        foreach ($request->input('tags') as $tag){
+            if (isset($tag['id'])){
+                TestTag::create([
+                   'test_id' => $test->id,
+                   'tag_id' => $tag['id'],
+                ]);
+            }
+            else{
+                $tag = Tag::create([
+                    'value' => $tag['value']
+                ]);
+                TestTag::create([
+                    'test_id' => $test->id,
+                   'tag_id' => $tag->id,
+                ]);
+            }
+        }
+
+        //Create questions. And answers for each
+        foreach ($request->input('questions') as $newQuestionData){
+            $question = Question::create([
+                'test_id' => $test->id,
+                'question_body' => $newQuestionData['question_body'],
+                'question_type' => $newQuestionData['question_type'],
+                'question_points' => $newQuestionData['question_points'],
+            ]);
+            Answer::create([
+                'question_id' => $question->id,
+                'answer_data' => $newQuestionData['answer_data'],
+            ]);
+        }
     }
 
     /**
@@ -71,7 +109,7 @@ class TestController extends Controller
      */
     public function edit(Test $test)
     {
-        //
+        return view('test.new', compact('test'));
     }
 
     /**

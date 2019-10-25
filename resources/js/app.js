@@ -20,6 +20,8 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('edit-test', require('./components/test/EditTest').default);
+Vue.component('tags-bar', require('./components/TagsBar').default);
+Vue.component('tags-input', require('@voerro/vue-tagsinput').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -1,3 +1,5 @@
+<style>
+</style>
 <template>
     <div class="container">
         <div class="row justify-content-center">
@@ -16,6 +18,12 @@
                                       placeholder="Here you can describe this test" v-model="testAbout">
                             </textarea>
                         </div>
+                        <div class="my-3">
+                            <label for="tags">Test tags:</label>
+                            <tags-bar v-model="testTags"></tags-bar>
+                            <small class="form-text text-muted">Test must include at least one tag.</small>
+                        </div>
+
                         <div class="form-row text-center">
                             <div class="col-5 border p-0 ml-1 mr-auto">
                                 <div class="custom-control custom-checkbox m-1">
@@ -37,7 +45,6 @@
                                     </label>
                                 </div>
                                 <div class="form-check m-1" v-show="timerEnable">
-                                    <!--                                    <label for="timer" class="form-check-label">Timer</label>-->
                                     <input type="number" min="0" max="180" name="timer" id="timer" step="0.5"
                                            v-model="timer">
                                     <small class="form-text text-muted">180 minute is maximum.</small>
@@ -61,7 +68,7 @@
                         </div>
                     </div>
                     <div class="card text-center my-3">
-                        <div @click="readyToCreate" class="btn btn-primary">Create Test.</div>
+                        <div @click="readyToCreate" class="btn btn-primary">{{ action }}</div>
                     </div>
                     <div class="alert alert-danger" v-for="error in errors">
                         {{ error }}
@@ -77,16 +84,41 @@
     import EditQuestion from './question/EditQuestion'
     import ShowQuestion from './question/ShowQuestion'
 
+
     export default {
         components: {EditQuestion, ShowQuestion},
 
+        props: ['data'],
+
+        mounted() {
+          if(this.data) {
+              this.action = 'Edit test.';
+              let data = JSON.parse(this.data);
+
+              this.testTitle = data.title;
+              this.testAbout = data.about;
+              this.testTags = data.tags;
+              if(data.timer){
+                  this.timer = data.timer;
+                  this.timerEnable = true;
+              }
+              data.questions.forEach((question) => {
+                  question.answer_data = question.answers.answer_data;
+              });
+              this.full_result = data.full_result;
+              this.questions = data.questions;
+          }
+        },
+
         data() {
             return {
+                action: 'Create Test.',
                 creatingQuestion: false,
                 errors: [],
 
                 testTitle: null,
                 testAbout: null,
+                testTags: null,
                 timer: null,
                 timerEnable: false,
                 full_result: false,
@@ -114,6 +146,7 @@
                         title: this.testTitle,
                         about: this.testAbout,
                         timer: this.timer,
+                        tags: this.testTags,
                         full_result: this.full_result,
                         questions: this.questions
                     });
@@ -126,6 +159,10 @@
                 this.errors = [];
                 let isValid = true;
                 if (!this.testTitle) {
+                    this.errors.push('Test must include at least one tag');
+                    isValid = false;
+                }
+                if (!this.testTags) {
                     this.errors.push('Title is required field!');
                     isValid = false;
                 }
@@ -135,7 +172,6 @@
                 }
                 return isValid;
             }
-
         }
     }
 </script>

@@ -7,19 +7,23 @@
 
                 @foreach($tests as $test)
                     <div class="card my-2">
-                        <div class="card-header" style="display: flex">
-                            <div class="" style="flex: 1">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="">
                                 {{ $test->title }}
                             </div>
-                            <div class="text-right" style="flex: 1">
-                                <a class="btn btn-primary" href="{{ route('test.show', $test->id) }}">Try to pass</a>
+                            <div>
+                                <div class="text-right">
+                                    <a class="btn btn-success btn-sm" href="{{ route('test.show', $test->id) }}">Try to pass</a>
+                                    <a class="btn btn-primary btn-sm" href="{{ route('test.edit', $test->id) }}">Edit</a>
+                                    <a class="btn btn-danger btn-sm" href="{{ route('test.show', $test->id) }}">Delete</a>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
                             Tags:
                             @foreach($test->tags as $tag)
                                 <span>
-                                    {{ $tag->name }},
+                                    {{ $tag->value }},
                                 </span>
                             @endforeach
                         </div>

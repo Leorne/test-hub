@@ -121,7 +121,75 @@ class TestController extends Controller
      */
     public function update(Request $request, Test $test)
     {
-        //
+        $request->validate([
+            'title' => 'required|max:255',
+            'about' => 'string|nullable',
+            'questions' => 'required',
+            'timer' => 'integer|max:180|nullable',
+            'full_result' => 'boolean'
+        ]);
+
+        $test->update([
+            'title' => $request->input('title'),
+            'about' => $request->input('about'),
+            'timer' => $request->input('timer'),
+            'full_result' => $request->input('ful_result'),
+        ]);
+
+
+        //Data for destroy old relations
+        $newTagsId = [];
+        $oldTagsId = [];
+        $oldTags = TestTag::where('test_id',$test->id)->get();
+        foreach ($oldTags as $tag){
+            $oldTagsId[] = $tag->tag_id;
+        }
+
+        //Update tags
+        foreach ($request->input('tags') as $tag){
+            if (isset($tag['id'])){
+                $newTagsId[] = TestTag::firstOrCreate([
+                    'test_id' => $test->id,
+                    'tag_id' => $tag['id']
+                ])->tag_id;
+            }
+            else{
+                $newTag = Tag::firstOrCreate([
+                    'value' => $tag['value']
+                ]);
+                $newTagsId[] = TestTag::firstOrCreate([
+                    'test_id' => $test->id,
+                    'tag_id' => $newTag->id,
+                ])->tag_id;
+            }
+        }
+        //Delete old tags relation, that has been removed from test
+        $tagsForDeleting = array_diff($oldTagsId, $newTagsId);
+        foreach ($tagsForDeleting as $tag){
+            TestTag::destroy([
+               'test_id' => $test->id,
+               'tag_id' => $tag
+            ]);
+        }
+
+        //Questions update
+        $test->questions->each(function ($question){
+            $question->delete();
+        });
+
+
+        foreach ($request->input('questions') as $newQuestionData){
+            $question = Question::create([
+                'test_id' => $test->id,
+                'question_body' => $newQuestionData['question_body'],
+                'question_type' => $newQuestionData['question_type'],
+                'question_points' => $newQuestionData['question_points'],
+            ]);
+            Answer::create([
+                'question_id' => $question->id,
+                'answer_data' => $newQuestionData['answer_data'],
+            ]);
+        }
     }
 
     /**

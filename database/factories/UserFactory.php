@@ -37,8 +37,8 @@ $factory->define(App\Tag::class, function (Faker $faker) {
 //TestTag factory
 $factory->define(App\TestTag::class, function (Faker $faker) {
     return [
-        'test_id' => '',
-        'tag_id' => ''
+        'test_id' => $faker->numberBetween(1,3000),
+        'tag_id' => $faker->numberBetween(1,3000)
     ];
 });
 

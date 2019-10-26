@@ -20,7 +20,8 @@
                         </div>
                         <div class="my-3">
                             <label for="tags">Test tags:</label>
-                            <tags-bar v-model="testTags"></tags-bar>
+                            <tags-bar v-model="testTags"
+                                        :old="testTags"></tags-bar>
                             <small class="form-text text-muted">Test must include at least one tag.</small>
                         </div>
 
@@ -52,12 +53,14 @@
                             </div>
                         </div>
                     </div>
-                    <div v-for="(question, index) in questions">
-                        <show-question :question="question" :index="index"
-                                       @edit="editQuestion"
-                                       @delete="deleteQuestion"
-                        ></show-question>
-                    </div>
+                    <draggable v-model="questions">
+                        <div v-for="(question, index) in questions">
+                            <show-question :question="question" :index="index"
+                                           @edit="editQuestion"
+                                           @delete="deleteQuestion"
+                            ></show-question>
+                        </div>
+                    </draggable>
                     <div class="card text-center">
                         <span class="btn btn-secondary" @click="creatingQuestion = true">New question.</span>
                         <div>
@@ -83,10 +86,10 @@
 
     import EditQuestion from './question/EditQuestion'
     import ShowQuestion from './question/ShowQuestion'
-
+    import Draggable from 'vuedraggable'
 
     export default {
-        components: {EditQuestion, ShowQuestion},
+        components: {EditQuestion, ShowQuestion, Draggable},
 
         props: ['data'],
 

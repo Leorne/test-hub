@@ -15,16 +15,22 @@
     import styleTags from '@voerro/vue-tagsinput/dist/style.css'
 
     export default {
-        components: { TagsInput },
+        components: {TagsInput},
+
+        props: ['value'],
 
         mounted() {
+            this.tags = this.value;
             axios.get('/catalog/tags.json')
-                .then(this.setExistTags)
+                .then(this.setExistTags);
         },
 
         watch: {
-          tags(){
-              this.$emit('input', this.tags);
+            tags() {
+                this.$emit('input', this.tags);
+            },
+            value() {
+                this.tags = this.value;
             }
         },
 

@@ -2129,9 +2129,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: ['data'],
   mounted: function mounted() {
-    if (this.data) {
+    if (this.data !== null) {
       this.action = 'Edit test.';
       var data = JSON.parse(this.data);
+      this.newData = data;
       this.testTitle = data.title;
       this.testAbout = data.about;
       this.testTags = data.tags;
@@ -2141,15 +2142,16 @@ __webpack_require__.r(__webpack_exports__);
         this.timerEnable = true;
       }
 
-      data.questions.forEach(function (question) {
+      data.version.questions.forEach(function (question) {
         question.answer_data = question.answers.answer_data;
       });
       this.full_result = data.full_result;
-      this.questions = data.questions;
+      this.questions = data.version.questions;
     }
   },
   data: function data() {
     return {
+      newData: null,
       action: 'Create Test.',
       creatingQuestion: false,
       errors: [],

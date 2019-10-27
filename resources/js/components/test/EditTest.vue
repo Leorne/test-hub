@@ -97,7 +97,7 @@
           if(this.data) {
               this.action = 'Edit test.';
               let data = JSON.parse(this.data);
-
+              this.newData = data;
               this.testTitle = data.title;
               this.testAbout = data.about;
               this.testTags = data.tags;
@@ -105,16 +105,17 @@
                   this.timer = data.timer;
                   this.timerEnable = true;
               }
-              data.questions.forEach((question) => {
+              data.version.questions.forEach((question) => {
                   question.answer_data = question.answers.answer_data;
               });
               this.full_result = data.full_result;
-              this.questions = data.questions;
+              this.questions = data.version.questions;
           }
         },
 
         data() {
             return {
+                newData: null,
                 action: 'Create Test.',
                 creatingQuestion: false,
                 errors: [],

@@ -7,6 +7,7 @@ use App\Question;
 use App\Tag;
 use App\Test;
 use App\TestTag;
+use App\TestVersion;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -54,7 +55,7 @@ class TestController extends Controller
             'about' => $request->input('about'),
             'timer' => $request->input('timer'),
             'full_result' => $request->input('ful_result'),
-        ]);
+        ])->fresh();
 
         //Create tags data
         foreach ($request->input('tags') as $tag){
@@ -75,10 +76,11 @@ class TestController extends Controller
             }
         }
 
+
         //Create questions. And answers for each
         foreach ($request->input('questions') as $newQuestionData){
             $question = Question::create([
-                'test_id' => $test->id,
+                'test_version_id' => $test->version->id,
                 'question_body' => $newQuestionData['question_body'],
                 'question_type' => $newQuestionData['question_type'],
                 'question_points' => $newQuestionData['question_points'],
@@ -172,15 +174,15 @@ class TestController extends Controller
             ]);
         }
 
-        //Questions update
-        $test->questions->each(function ($question){
-            $question->delete();
-        });
+        //Create new test questions version
+        $version = TestVersion::create([
+            'test_id' => $test->id,
+        ]);
 
-
+        //Create new version test questions. And answers for each
         foreach ($request->input('questions') as $newQuestionData){
             $question = Question::create([
-                'test_id' => $test->id,
+                'test_version_id' => $version->id,
                 'question_body' => $newQuestionData['question_body'],
                 'question_type' => $newQuestionData['question_type'],
                 'question_points' => $newQuestionData['question_points'],

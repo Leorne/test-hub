@@ -3,6 +3,8 @@
 namespace Tests\Unit;
 
 use App\Answer;
+use App\Tag;
+use App\Test;
 use App\TestTag;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,6 +21,12 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-        $this->assertTrue(true);
+        $test = Test::create([
+            'title' =>'title',
+            'about' => 'about',
+            'timer' => null,
+            'full_result' => false,
+        ])->fresh();
+        dd($test->version->id);
     }
 }

@@ -2129,9 +2129,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: ['data'],
   mounted: function mounted() {
-    if (this.data !== null) {
+    var data = JSON.parse(this.data);
+
+    if (data) {
       this.action = 'Edit test.';
-      var data = JSON.parse(this.data);
+      this.sendDataPath = '/new/' + data.id;
       this.newData = data;
       this.testTitle = data.title;
       this.testAbout = data.about;
@@ -2153,6 +2155,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       newData: null,
       action: 'Create Test.',
+      sendDataPath: '/new',
       creatingQuestion: false,
       errors: [],
       testTitle: null,
@@ -2179,7 +2182,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (this.validate()) {
-        axios.post('/new', {
+        axios.post(this.sendDataPath, {
           title: this.testTitle,
           about: this.testAbout,
           timer: this.timer,

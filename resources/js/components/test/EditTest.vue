@@ -21,7 +21,7 @@
                         <div class="my-3">
                             <label for="tags">Test tags:</label>
                             <tags-bar v-model="testTags"
-                                        :old="testTags"></tags-bar>
+                                      :old="testTags"></tags-bar>
                             <small class="form-text text-muted">Test must include at least one tag.</small>
                         </div>
 
@@ -94,29 +94,31 @@
         props: ['data'],
 
         mounted() {
-          if(this.data) {
-              this.action = 'Edit test.';
-              let data = JSON.parse(this.data);
-              this.newData = data;
-              this.testTitle = data.title;
-              this.testAbout = data.about;
-              this.testTags = data.tags;
-              if(data.timer){
-                  this.timer = data.timer;
-                  this.timerEnable = true;
-              }
-              data.version.questions.forEach((question) => {
-                  question.answer_data = question.answers.answer_data;
-              });
-              this.full_result = data.full_result;
-              this.questions = data.version.questions;
-          }
+            let data = JSON.parse(this.data);
+            if (data) {
+                this.action = 'Edit test.';
+                this.sendDataPath = '/new/' + data.id;
+                this.newData = data;
+                this.testTitle = data.title;
+                this.testAbout = data.about;
+                this.testTags = data.tags;
+                if (data.timer) {
+                    this.timer = data.timer;
+                    this.timerEnable = true;
+                }
+                data.version.questions.forEach((question) => {
+                    question.answer_data = question.answers.answer_data;
+                });
+                this.full_result = data.full_result;
+                this.questions = data.version.questions;
+            }
         },
 
         data() {
             return {
                 newData: null,
                 action: 'Create Test.',
+                sendDataPath: '/new',
                 creatingQuestion: false,
                 errors: [],
 
@@ -146,7 +148,7 @@
 
             readyToCreate() {
                 if (this.validate()) {
-                    axios.post('/new', {
+                    axios.post(this.sendDataPath, {
                         title: this.testTitle,
                         about: this.testAbout,
                         timer: this.timer,

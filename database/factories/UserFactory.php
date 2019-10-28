@@ -23,6 +23,8 @@ $factory->define(App\Test::class, function (Faker $faker) {
     return [
         'title' => $faker->sentence,
         'about' => $faker->text(),
+        'timer' => null,
+        'full_result' => null
     ];
 });
 
@@ -44,10 +46,11 @@ $factory->define(App\TestTag::class, function (Faker $faker) {
 
 //Question factory
 $factory->define(App\Question::class, function (Faker $faker) {
+    $types = ['one_answer', 'many_answers', 'input_number', 'input_string'];
     return [
-        'test_id' => '',
+        'test_version_id' => 1,
         'question_body' => $faker->text,
-        'question_type' => '',
+        'question_type' => $types[array_rand($types)],
         'question_points' => $faker->numberBetween(1, 10),
     ];
 });

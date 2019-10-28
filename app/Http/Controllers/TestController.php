@@ -90,6 +90,8 @@ class TestController extends Controller
                 'answer_data' => $newQuestionData['answer_data'],
             ]);
         }
+
+        return response([], 200);
     }
 
     /**
@@ -179,6 +181,9 @@ class TestController extends Controller
             'test_id' => $test->id,
         ]);
 
+//        $newTest = $test->fresh();
+
+//        dd($newTest->version->id);
         //Create new version test questions. And answers for each
         foreach ($request->input('questions') as $newQuestionData){
             $question = Question::create([
@@ -192,6 +197,7 @@ class TestController extends Controller
                 'answer_data' => $newQuestionData['answer_data'],
             ]);
         }
+        return response(200);
     }
 
     /**

@@ -38,6 +38,6 @@ class CreateTestTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('test_tags');
+        Schema::dropIfExists('test_tag');
     }
 }

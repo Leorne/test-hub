@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Test extends Model
 {
     protected $guarded = [];
-    protected $with = ['tags', 'version'];
-
+    protected $with = ['tags'];
+    protected $withCount = ['allVersions'];
     protected static function boot()
     {
         parent::boot();
@@ -17,6 +17,7 @@ class Test extends Model
                 'test_id' => $test->id
             ]);
         });
+        static::with('version');
 
     }
 
@@ -32,7 +33,8 @@ class Test extends Model
 
     public function version($version = null)
     {
-        return $version ? $this->getVersion($version) : $this->getLastVersion();
+//        $this->getLastVersion()
+        return $version ? $this->getVersion($version) : $this->getVersion($this->all_versions_count);
     }
 
     public function getLastVersion()
@@ -41,6 +43,14 @@ class Test extends Model
     }
 
     public function getVersion($version) {
-        return $this->hasOne(TestVersion::class)->where('id', $version);
+        return $this->hasOne(TestVersion::class)->where('id', $version)->get();
+    }
+
+    public function allVersions(){
+        return $this->hasMany(TestVersion::class);
+    }
+
+    public function getLatestVersion(){
+        return TestVersion::where('id',$this->id)->latest()->first();
     }
 }

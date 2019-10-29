@@ -36,49 +36,50 @@ class TestController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $request->validate([
-           'title' => 'required|max:255',
+            'title' => 'required|max:255',
             'about' => 'string|nullable',
             'questions' => 'required',
             'timer' => 'integer|max:180|nullable',
-            'full_result' => 'boolean'
+            'full_result' => 'boolean|nullable'
         ]);
+
+        $inputData = $request->input();
 
         //Create test data
         $test = Test::create([
-            'title' => $request->input('title'),
-            'about' => $request->input('about'),
-            'timer' => $request->input('timer'),
-            'full_result' => $request->input('ful_result'),
+            'title' => $inputData['title'],
+            'about' => $inputData['about'],
+            'timer' => $inputData['timer'],
+            'full_result' => $inputData['full_result'],
         ])->fresh();
 
         //Create tags data
-        foreach ($request->input('tags') as $tag){
-            if (isset($tag['id'])){
+        foreach ($inputData['tags'] as $tag) {
+            if (isset($tag['id'])) {
                 TestTag::create([
-                   'test_id' => $test->id,
-                   'tag_id' => $tag['id'],
+                    'test_id' => $test->id,
+                    'tag_id' => $tag['id'],
                 ]);
-            }
-            else{
+            } else {
                 $tag = Tag::create([
                     'value' => $tag['value']
                 ]);
                 TestTag::create([
                     'test_id' => $test->id,
-                   'tag_id' => $tag->id,
+                    'tag_id' => $tag->id,
                 ]);
             }
         }
 
 
         //Create questions. And answers for each
-        foreach ($request->input('questions') as $newQuestionData){
+        foreach ($inputData['questions'] as $newQuestionData) {
             $question = Question::create([
                 'test_version_id' => $test->version->id,
                 'question_body' => $newQuestionData['question_body'],
@@ -97,7 +98,7 @@ class TestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Test  $test
+     * @param \App\Test $test
      * @return \Illuminate\Http\Response
      */
     public function show(Test $test)
@@ -108,7 +109,7 @@ class TestController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Test  $test
+     * @param \App\Test $test
      * @return \Illuminate\Http\Response
      */
     public function edit(Test $test)
@@ -119,8 +120,8 @@ class TestController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Test  $test
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Test $test
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Test $test)
@@ -130,34 +131,36 @@ class TestController extends Controller
             'about' => 'string|nullable',
             'questions' => 'required',
             'timer' => 'integer|max:180|nullable',
-            'full_result' => 'boolean'
+            'full_result' => 'boolean|nullable',
+            'editQuestions' => 'boolean'
         ]);
 
+        $inputData = $request->input();
+
         $test->update([
-            'title' => $request->input('title'),
-            'about' => $request->input('about'),
-            'timer' => $request->input('timer'),
-            'full_result' => $request->input('ful_result'),
+            'title' => $inputData['title'],
+            'about' => $inputData['about'],
+            'timer' => $inputData['timer'],
+            'full_result' => $inputData['full_result'],
         ]);
 
 
         //Data for destroy old relations
         $newTagsId = [];
         $oldTagsId = [];
-        $oldTags = TestTag::where('test_id',$test->id)->get();
-        foreach ($oldTags as $tag){
+        $oldTags = TestTag::where('test_id', $test->id)->get();
+        foreach ($oldTags as $tag) {
             $oldTagsId[] = $tag->tag_id;
         }
 
         //Update tags
-        foreach ($request->input('tags') as $tag){
-            if (isset($tag['id'])){
+        foreach ($inputData['tags'] as $tag) {
+            if (isset($tag['id'])) {
                 $newTagsId[] = TestTag::firstOrCreate([
                     'test_id' => $test->id,
                     'tag_id' => $tag['id']
                 ])->tag_id;
-            }
-            else{
+            } else {
                 $newTag = Tag::firstOrCreate([
                     'value' => $tag['value']
                 ]);
@@ -167,35 +170,31 @@ class TestController extends Controller
                 ])->tag_id;
             }
         }
+
         //Delete old tags relation, that has been removed from test
         $tagsForDeleting = array_diff($oldTagsId, $newTagsId);
-        foreach ($tagsForDeleting as $tag){
-            TestTag::destroy([
-               'test_id' => $test->id,
-               'tag_id' => $tag
-            ]);
-        }
+        TestTag::where('test_id', $test->id)->whereIn('tag_id', $tagsForDeleting)->delete();
 
         //Create new test questions version
         $version = TestVersion::create([
             'test_id' => $test->id,
         ]);
 
-//        $newTest = $test->fresh();
-
-//        dd($newTest->version->id);
-        //Create new version test questions. And answers for each
-        foreach ($request->input('questions') as $newQuestionData){
-            $question = Question::create([
-                'test_version_id' => $version->id,
-                'question_body' => $newQuestionData['question_body'],
-                'question_type' => $newQuestionData['question_type'],
-                'question_points' => $newQuestionData['question_points'],
-            ]);
-            Answer::create([
-                'question_id' => $question->id,
-                'answer_data' => $newQuestionData['answer_data'],
-            ]);
+        //if user edit questions
+        if ($inputData['editQuestions']){
+            //Create new version test questions. And answers for each
+            foreach ($inputData['questions'] as $newQuestionData) {
+                $question = Question::create([
+                    'test_version_id' => $version->id,
+                    'question_body' => $newQuestionData['question_body'],
+                    'question_type' => $newQuestionData['question_type'],
+                    'question_points' => $newQuestionData['question_points'],
+                ]);
+                Answer::create([
+                    'question_id' => $question->id,
+                    'answer_data' => $newQuestionData['answer_data'],
+                ]);
+            }
         }
         return response(200);
     }
@@ -203,7 +202,7 @@ class TestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Test  $test
+     * @param \App\Test $test
      * @return \Illuminate\Http\Response
      */
     public function destroy(Test $test)

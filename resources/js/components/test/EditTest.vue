@@ -53,15 +53,24 @@
                             </div>
                         </div>
                     </div>
-                    <draggable v-model="questions">
-                        <div v-for="(question, index) in questions">
-                            <show-question :question="question" :index="index"
-                                           @edit="editQuestion"
-                                           @delete="deleteQuestion"
-                            ></show-question>
+                    <div>
+                        <div class="card">
+                            <div class="btn btn-secondary text-center" @click="editQuestion=true" v-if="editing && !editQuestion">
+                                <h3>Do you wanna edit questions?</h3>
+                                <h5>Click here to do this.</h5>
+                                <h5>If you do this all current test results will be old</h5>
+                            </div>
                         </div>
-                    </draggable>
-                    <div class="card text-center">
+                        <draggable v-if="editing && editQuestion" v-model="questions">
+                            <div v-for="(question, index) in questions">
+                                <show-question :question="question" :index="index"
+                                               @edit="editQuestion"
+                                               @delete="deleteQuestion"
+                                ></show-question>
+                            </div>
+                        </draggable>
+                    </div>
+                    <div v-if="editQuestions" class="card text-center">
                         <span class="btn btn-secondary" @click="creatingQuestion = true">New question.</span>
                         <div>
                             <edit-question v-if="creatingQuestion"
@@ -71,7 +80,8 @@
                         </div>
                     </div>
                     <div class="card text-center my-3">
-                        <div @click="readyToCreate" class="btn btn-primary">{{ action }}</div>
+                        <div v-if="editing" @click="readyToCreate" class="btn btn-primary">Edit test.</div>
+                        <div v-else @click="readyToCreate" class="btn btn-primary">Create test.</div>
                     </div>
                     <div class="alert alert-danger" v-for="error in errors">
                         {{ error }}
@@ -96,6 +106,7 @@
         mounted() {
             let data = JSON.parse(this.data);
             if (data) {
+                this.editing = true;
                 this.action = 'Edit test.';
                 this.sendDataPath = '/new/' + data.id;
                 this.newData = data;
@@ -111,13 +122,17 @@
                 });
                 this.full_result = data.full_result;
                 this.questions = data.version.questions;
+            }else{
+                this.editQuestion = true;
             }
         },
 
         data() {
             return {
-                newData: null,
+                editing: false,
+                editQuestion: false,
                 action: 'Create Test.',
+                newData: null,
                 sendDataPath: '/new',
                 creatingQuestion: false,
                 errors: [],
@@ -149,6 +164,7 @@
             readyToCreate() {
                 if (this.validate()) {
                     axios.post(this.sendDataPath, {
+                        editQuestion: this.editQuestion,
                         title: this.testTitle,
                         about: this.testAbout,
                         timer: this.timer,

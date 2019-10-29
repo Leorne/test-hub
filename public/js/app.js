@@ -2118,6 +2118,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2132,6 +2142,7 @@ __webpack_require__.r(__webpack_exports__);
     var data = JSON.parse(this.data);
 
     if (data) {
+      this.editing = true;
       this.action = 'Edit test.';
       this.sendDataPath = '/new/' + data.id;
       this.newData = data;
@@ -2153,8 +2164,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      newData: null,
+      editing: false,
+      editQuestion: false,
       action: 'Create Test.',
+      newData: null,
       sendDataPath: '/new',
       creatingQuestion: false,
       errors: [],
@@ -2183,6 +2196,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.validate()) {
         axios.post(this.sendDataPath, {
+          editQuestion: this.editQuestion,
           title: this.testTitle,
           about: this.testAbout,
           timer: this.timer,
@@ -43907,72 +43921,121 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c(
-              "draggable",
-              {
-                model: {
-                  value: _vm.questions,
-                  callback: function($$v) {
-                    _vm.questions = $$v
-                  },
-                  expression: "questions"
-                }
-              },
-              _vm._l(_vm.questions, function(question, index) {
-                return _c(
-                  "div",
-                  [
-                    _c("show-question", {
-                      attrs: { question: question, index: index },
-                      on: { edit: _vm.editQuestion, delete: _vm.deleteQuestion }
-                    })
-                  ],
-                  1
-                )
-              }),
-              0
+              "div",
+              [
+                _c("div", { staticClass: "card" }, [
+                  _vm.editing && !_vm.editQuestion
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "btn btn-secondary text-center",
+                          on: {
+                            click: function($event) {
+                              _vm.editQuestion = true
+                            }
+                          }
+                        },
+                        [
+                          _c("h3", [_vm._v("Do you wanna edit questions?")]),
+                          _vm._v(" "),
+                          _c("h5", [_vm._v("Click here to do this.")]),
+                          _vm._v(" "),
+                          _c("h5", [
+                            _vm._v(
+                              "If you do this all current test results will be old"
+                            )
+                          ])
+                        ]
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _vm.editing && _vm.editQuestion
+                  ? _c(
+                      "draggable",
+                      {
+                        model: {
+                          value: _vm.questions,
+                          callback: function($$v) {
+                            _vm.questions = $$v
+                          },
+                          expression: "questions"
+                        }
+                      },
+                      _vm._l(_vm.questions, function(question, index) {
+                        return _c(
+                          "div",
+                          [
+                            _c("show-question", {
+                              attrs: { question: question, index: index },
+                              on: {
+                                edit: _vm.editQuestion,
+                                delete: _vm.deleteQuestion
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      }),
+                      0
+                    )
+                  : _vm._e()
+              ],
+              1
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "card text-center" }, [
-              _c(
-                "span",
-                {
-                  staticClass: "btn btn-secondary",
-                  on: {
-                    click: function($event) {
-                      _vm.creatingQuestion = true
-                    }
-                  }
-                },
-                [_vm._v("New question.")]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                [
-                  _vm.creatingQuestion
-                    ? _c("edit-question", {
-                        on: {
-                          create: _vm.addQuestion,
-                          close: function($event) {
-                            _vm.creatingQuestion = !_vm.creatingQuestion
-                          }
+            _vm.editing || _vm.editQuestion
+              ? _c("div", { staticClass: "card text-center" }, [
+                  _c(
+                    "span",
+                    {
+                      staticClass: "btn btn-secondary",
+                      on: {
+                        click: function($event) {
+                          _vm.creatingQuestion = true
                         }
-                      })
-                    : _vm._e()
-                ],
-                1
-              )
-            ]),
+                      }
+                    },
+                    [_vm._v("New question.")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    [
+                      _vm.creatingQuestion
+                        ? _c("edit-question", {
+                            on: {
+                              create: _vm.addQuestion,
+                              close: function($event) {
+                                _vm.creatingQuestion = !_vm.creatingQuestion
+                              }
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "card text-center my-3" }, [
-              _c(
-                "div",
-                {
-                  staticClass: "btn btn-primary",
-                  on: { click: _vm.readyToCreate }
-                },
-                [_vm._v(_vm._s(_vm.action))]
-              )
+              _vm.editing
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "btn btn-primary",
+                      on: { click: _vm.readyToCreate }
+                    },
+                    [_vm._v("Edit test.")]
+                  )
+                : _c(
+                    "div",
+                    {
+                      staticClass: "btn btn-primary",
+                      on: { click: _vm.readyToCreate }
+                    },
+                    [_vm._v("Create test.")]
+                  )
             ]),
             _vm._v(" "),
             _vm._l(_vm.errors, function(error) {

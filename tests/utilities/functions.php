@@ -15,6 +15,9 @@ function makeTestData(){
 
     $test = make('App\Test');
     $questionData = [];
+    $tags[] = make('App\Tag')->toArray();
+    $tags[] = make('App\Tag')->toArray();
+    $tags[] = make('App\Tag')->toArray();
 
     for($i = 0; $i<5; $i++){
         $question = raw('App\Question', ['question_type' => 'one_answer']);
@@ -34,12 +37,7 @@ function makeTestData(){
         "about" => $test->about,
         "timer" => null,
         "full_result" => false,
-        "tags" => [
-            0 => [
-                'key' => null,
-                'value' => 'asdqd'
-            ]
-        ],
+        "tags" => $tags,
         "questions" => $questionData,
     ];
     return $data;

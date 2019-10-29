@@ -53,10 +53,6 @@ class CreateTest extends TestCase
         $newTest = Test::all()->last();
 
         $this->assertNotEquals($oldTest->title, $newTest->title);
-
-//        $this->assertNotEquals($oldTest->version->id, $newTest->version->id);
-        $versionsCount = TestVersion::where('test_id',1)->latest();
-        $versions = $newTest->fresh();
-        dd($newTest->toArray());
+        $this->assertNotEquals($oldTest->tags,$newTest->tags);
     }
 }

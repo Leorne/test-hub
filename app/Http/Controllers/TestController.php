@@ -77,7 +77,6 @@ class TestController extends Controller
             }
         }
 
-
         //Create questions. And answers for each
         foreach ($inputData['questions'] as $newQuestionData) {
             $question = Question::create([
@@ -91,7 +90,6 @@ class TestController extends Controller
                 'answer_data' => $newQuestionData['answer_data'],
             ]);
         }
-
         return response([], 200);
     }
 
@@ -132,7 +130,7 @@ class TestController extends Controller
             'questions' => 'required',
             'timer' => 'integer|max:180|nullable',
             'full_result' => 'boolean|nullable',
-            'editQuestions' => 'boolean'
+            'newVersion' => 'boolean'
         ]);
 
         $inputData = $request->input();
@@ -181,7 +179,7 @@ class TestController extends Controller
         ]);
 
         //if user edit questions
-        if ($inputData['editQuestions']){
+        if ($inputData['newVersion']){
             //Create new version test questions. And answers for each
             foreach ($inputData['questions'] as $newQuestionData) {
                 $question = Question::create([

@@ -2142,7 +2142,7 @@ __webpack_require__.r(__webpack_exports__);
     var data = JSON.parse(this.data);
 
     if (data) {
-      this.editing = true;
+      this.testEditingState = true;
       this.action = 'Edit test.';
       this.sendDataPath = '/new/' + data.id;
       this.newData = data;
@@ -2160,12 +2160,14 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.full_result = data.full_result;
       this.questions = data.version.questions;
+    } else {
+      this.editWithNewVersion = true;
     }
   },
   data: function data() {
     return {
-      editing: false,
-      editQuestion: false,
+      testEditingState: false,
+      editWithNewVersion: false,
       action: 'Create Test.',
       newData: null,
       sendDataPath: '/new',
@@ -2191,12 +2193,12 @@ __webpack_require__.r(__webpack_exports__);
     deleteQuestion: function deleteQuestion(index) {
       this.questions.splice(index, 1);
     },
-    readyToCreate: function readyToCreate() {
+    readyToSendData: function readyToSendData() {
       var _this = this;
 
       if (this.validate()) {
         axios.post(this.sendDataPath, {
-          editQuestion: this.editQuestion,
+          newVersion: this.editWithNewVersion,
           title: this.testTitle,
           about: this.testAbout,
           timer: this.timer,
@@ -43924,14 +43926,14 @@ var render = function() {
               "div",
               [
                 _c("div", { staticClass: "card" }, [
-                  _vm.editing && !_vm.editQuestion
+                  _vm.testEditingState && !_vm.editWithNewVersion
                     ? _c(
                         "div",
                         {
                           staticClass: "btn btn-secondary text-center",
                           on: {
                             click: function($event) {
-                              _vm.editQuestion = true
+                              _vm.editWithNewVersion = true
                             }
                           }
                         },
@@ -43950,7 +43952,7 @@ var render = function() {
                     : _vm._e()
                 ]),
                 _vm._v(" "),
-                _vm.editing && _vm.editQuestion
+                _vm.editWithNewVersion
                   ? _c(
                       "draggable",
                       {
@@ -43984,7 +43986,7 @@ var render = function() {
               1
             ),
             _vm._v(" "),
-            _vm.editing || _vm.editQuestion
+            _vm.editWithNewVersion
               ? _c("div", { staticClass: "card text-center" }, [
                   _c(
                     "span",
@@ -44019,12 +44021,12 @@ var render = function() {
               : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "card text-center my-3" }, [
-              _vm.editing
+              _vm.testEditingState
                 ? _c(
                     "div",
                     {
                       staticClass: "btn btn-primary",
-                      on: { click: _vm.readyToCreate }
+                      on: { click: _vm.readyToSendData }
                     },
                     [_vm._v("Edit test.")]
                   )
@@ -44032,7 +44034,7 @@ var render = function() {
                     "div",
                     {
                       staticClass: "btn btn-primary",
-                      on: { click: _vm.readyToCreate }
+                      on: { click: _vm.readyToSendData }
                     },
                     [_vm._v("Create test.")]
                   )
@@ -61127,8 +61129,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/test-hub/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/test-hub/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/testhub/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/testhub/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -2222,7 +2222,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (!this.testTags) {
-        this.errors.push('Title is required field!');
+        this.errors.push('Tags is required field!');
         isValid = false;
       }
 
@@ -7452,7 +7452,7 @@ exports = module.exports = __webpack_require__(/*! ../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "\n.tags-input-root {\n  position: relative;\n}\n", ""]);
+exports.push([module.i, "\n.tags-input-root {\n    position: relative;\n}\n", ""]);
 
 // exports
 
@@ -42698,8 +42698,6 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _voerro_vue_tagsinput_dist_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @voerro/vue-tagsinput/dist/style.css */ "./node_modules/@voerro/vue-tagsinput/dist/style.css");
-/* harmony import */ var _voerro_vue_tagsinput_dist_style_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_voerro_vue_tagsinput_dist_style_css__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -42769,10 +42767,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-
-
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -42836,7 +42830,7 @@ __webpack_require__.r(__webpack_exports__);
             type: Boolean,
             default: false
         },
-
+        
         validate: {
             type: Function,
             default: () => true
@@ -42894,7 +42888,7 @@ __webpack_require__.r(__webpack_exports__);
         };
     },
 
-    created() {
+    created () {
         this.tagsFromValue();
 
         // Emit an event
@@ -42939,7 +42933,7 @@ __webpack_require__.r(__webpack_exports__);
         /**
          * Remove reserved regex characters from a string so that they don't
          * affect search results
-         *
+         * 
          * @param string
          * @returns String
          */
@@ -42949,7 +42943,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Add a tag whether from user input or from search results (typeahead)
-         *
+         * 
          * @param ignoreSearchResults
          * @returns void
          */
@@ -42999,7 +42993,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Add a tag from search results when a user clicks on it
-         *
+         * 
          * @param tag
          * @returns void
          */
@@ -43013,7 +43007,7 @@ __webpack_require__.r(__webpack_exports__);
          * Add the selected tag from the search results.
          * Clear search results.
          * Clear user input.
-         *
+         * 
          * @param tag
          * @return void
          */
@@ -43029,7 +43023,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Add/Select a tag
-         *
+         * 
          * @param tag
          * @returns void | Boolean
          */
@@ -43059,7 +43053,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Remove the last tag in the tags array.
-         *
+         * 
          * @returns void
          */
         removeLastTag() {
@@ -43070,7 +43064,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Remove the selected tag at the specified index.
-         *
+         * 
          * @param index
          * @returns void
          */
@@ -43092,7 +43086,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Search the currently entered text in the list of existing tags
-         *
+         * 
          * @returns void | Boolean
          */
         searchTag() {
@@ -43115,8 +43109,8 @@ __webpack_require__.r(__webpack_exports__);
                         const compareable = this.caseSensitiveTags
                             ? tag.value
                             : tag.value.toLowerCase();
-
-                        if (compareable.search(searchQuery) > -1 && !this.tagSelected(tag)) {
+  
+                        if (compareable.search(searchQuery) > -1 && ! this.tagSelected(tag)) {
                             this.searchResults.push(tag);
                         }
                     }
@@ -43146,11 +43140,11 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Hide the typeahead if there's nothing intered into the input field.
-         *
+         * 
          * @returns void
          */
         hideTypeahead() {
-            if (!this.input.length) {
+            if (! this.input.length) {
                 this.$nextTick(() => {
                     this.clearSearchResults();
                 });
@@ -43159,7 +43153,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Select the next search result in typeahead.
-         *
+         * 
          * @returns void
          */
         nextSearchResult() {
@@ -43170,7 +43164,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Select the previous search result in typeahead.
-         *
+         * 
          * @returns void
          */
         prevSearchResult() {
@@ -43181,7 +43175,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Clear/Empty the search results.
-         *
+         * 
          * @reutrns void
          */
         clearSearchResults() {
@@ -43191,7 +43185,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Clear the list of selected tags.
-         *
+         * 
          * @returns void
          */
         clearTags() {
@@ -43200,7 +43194,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Replace the currently selected tags with the tags from the value.
-         *
+         * 
          * @returns void
          */
         tagsFromValue() {
@@ -43210,7 +43204,7 @@ __webpack_require__.r(__webpack_exports__);
 
                     return;
                 }
-
+                
                 let tags = this.value;
 
                 // Don't update if nothing has changed
@@ -43234,7 +43228,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Check if a tag is already selected.
-         *
+         * 
          * @param tag
          * @returns Boolean
          */
@@ -43243,7 +43237,7 @@ __webpack_require__.r(__webpack_exports__);
                 return false;
             }
 
-            if (!tag) {
+            if (! tag) {
                 return false;
             }
 
@@ -43266,7 +43260,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Process all the keyup events.
-         *
+         * 
          * @param e
          * @returns void
          */
@@ -43276,7 +43270,7 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Process all the keydown events.
-         *
+         * 
          * @param e
          * @returns void
          */
@@ -43286,19 +43280,19 @@ __webpack_require__.r(__webpack_exports__);
 
         /**
          * Process the onfocus event.
-         *
+         * 
          * @param e
          * @returns void
          */
         onFocus(e) {
             this.$emit('focus', e)
-
+            
             this.searchTag();
         },
 
         /**
          * Process the onblur event.
-         *
+         * 
          * @param e
          * @returns void
          */
@@ -43547,7 +43541,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Discard search results\n      ")]
+                  [_vm._v("Discard search results")]
                 ),
                 _vm._v(" "),
                 _vm._l(_vm.searchResults, function(tag, index) {
@@ -61129,8 +61123,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/testhub/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/testhub/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/test-hub/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/test-hub/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

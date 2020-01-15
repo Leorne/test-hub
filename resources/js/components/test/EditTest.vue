@@ -185,7 +185,7 @@
                     isValid = false;
                 }
                 if (!this.testTags) {
-                    this.errors.push('Title is required field!');
+                    this.errors.push('Tags is required field!');
                     isValid = false;
                 }
                 if (this.questions.length < 1) {

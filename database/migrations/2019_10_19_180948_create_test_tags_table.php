@@ -15,13 +15,13 @@ class CreateTestTagsTable extends Migration
     {
         Schema::create('test_tag', function (Blueprint $table) {
 
-            $table->integer('test_id')->unsigned();
+            $table->unsignedBigInteger('test_id')->unsigned();
             $table->foreign('test_id')
                 ->references('id')
                 ->on('tests')
                 ->onDelete('cascade');
 
-            $table->integer('tag_id')->unsigned();
+            $table->unsignedBigInteger('tag_id')->unsigned();
             $table->foreign('tag_id')
                 ->references('id')
                 ->on('tags')

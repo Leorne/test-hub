@@ -8,7 +8,7 @@ class Question extends Model
 {
     protected $guarded = [];
     protected $with = ['answers'];
-    protected $hidden = ['created_at', 'updated_at', 'id', 'test_version_id'];
+    protected $hidden = ['created_at', 'updated_at', 'test_version_id'];
 
     protected static function boot()
     {

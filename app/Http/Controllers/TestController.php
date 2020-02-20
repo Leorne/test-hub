@@ -101,7 +101,7 @@ class TestController extends Controller
      */
     public function show(Test $test)
     {
-        return view('test.show', compact($test));
+        return view('test.show', compact('test'));
     }
 
     /**

@@ -2,10 +2,6 @@
 
 Auth::routes();
 
-//Route::get('/', function () {
-//    return view('welcome');
-//})->name('main');
-
 Route::get('/', 'TestController@index')->name('test');
 
 Route::get('/tests', 'TestController@index')->name('test.index');

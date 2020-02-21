@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Models\TestTag;
 use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model

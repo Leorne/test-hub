@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePassingTestHistoriesTable extends Migration
+class CreateInputNumbersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreatePassingTestHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('test_histories', function (Blueprint $table) {
+        Schema::create('input_numbers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('test_id');
-            $table->unsignedBigInteger('version_id');
-            $table->timestamp('start')->nullable();
-            $table->timestamp('end')->nullable();
+            $table->unsignedBigInteger('next_question_id')->nullable();
+            $table->string('answer');
+            $table->decimal('error_range')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreatePassingTestHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('test_histories');
+        Schema::dropIfExists('input_numbers');
     }
 }

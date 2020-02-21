@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\TestHistory;
-use App\Test;
-use App\TestVersion;
+use App\Models\TestHistory;
+use App\Models\Test;
+use App\Models\TestVersion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 

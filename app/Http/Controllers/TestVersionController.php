@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\TestVersion;
+use App\Models\TestVersion;
 use Illuminate\Http\Request;
 
 class TestVersionController extends Controller
@@ -41,7 +41,7 @@ class TestVersionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\TestVersion  $testVersion
+     * @param  \App\Models\TestVersion  $testVersion
      * @return \Illuminate\Http\Response
      */
     public function show(TestVersion $testVersion)
@@ -52,7 +52,7 @@ class TestVersionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TestVersion  $testVersion
+     * @param  \App\Models\TestVersion  $testVersion
      * @return \Illuminate\Http\Response
      */
     public function edit(TestVersion $testVersion)
@@ -64,7 +64,7 @@ class TestVersionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TestVersion  $testVersion
+     * @param  \App\Models\TestVersion  $testVersion
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, TestVersion $testVersion)
@@ -75,7 +75,7 @@ class TestVersionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TestVersion  $testVersion
+     * @param  \App\Models\TestVersion  $testVersion
      * @return \Illuminate\Http\Response
      */
     public function destroy(TestVersion $testVersion)

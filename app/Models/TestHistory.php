@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Models\QuestionAnswersHistory;
 use Illuminate\Database\Eloquent\Model;
 
 class TestHistory extends Model

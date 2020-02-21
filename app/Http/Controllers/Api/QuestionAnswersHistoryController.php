@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Question;
-use App\QuestionAnswersHistory;
-use App\TestHistory;
+use App\Models\Question;
+use App\Models\QuestionAnswersHistory;
+use App\Models\TestHistory;
 use Illuminate\Http\Request;
 
 class QuestionAnswersHistoryController extends Controller

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Answer;
-use App\Question;
-use App\Tag;
-use App\Test;
-use App\TestTag;
-use App\TestVersion;
+use App\Models\Answer;
+use App\Models\Question;
+use App\Models\Tag;
+use App\Models\Test;
+use App\Models\TestTag;
+use App\Models\TestVersion;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -96,7 +96,7 @@ class TestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Test $test
+     * @param \App\Models\Test $test
      * @return \Illuminate\Http\Response
      */
     public function show(Test $test)
@@ -107,7 +107,7 @@ class TestController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Test $test
+     * @param \App\Models\Test $test
      * @return \Illuminate\Http\Response
      */
     public function edit(Test $test)
@@ -119,7 +119,7 @@ class TestController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Test $test
+     * @param \App\Models\Test $test
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Test $test)
@@ -200,7 +200,7 @@ class TestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Test $test
+     * @param \App\Models\Test $test
      * @return \Illuminate\Http\Response
      */
     public function destroy(Test $test)

@@ -1,7 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Models\Question;
+use App\Models\Tag;
+use App\Models\TestVersion;
 use Illuminate\Database\Eloquent\Model;
 
 class Test extends Model

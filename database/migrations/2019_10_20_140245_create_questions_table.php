@@ -17,7 +17,6 @@ class CreateQuestionsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('test_version_id');
             $table->text('question_body');
-            $table->string('question_type');
             $table->smallInteger('question_points');
             $table->timestamps();
         });

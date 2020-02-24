@@ -1,6 +1,8 @@
 <?php
 
+Route::get('/{any}', 'SpaController@index')->where('any', '.*');
 Auth::routes();
+
 
 Route::get('/', 'TestController@index')->name('test');
 

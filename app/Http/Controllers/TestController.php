@@ -13,14 +13,12 @@ use Illuminate\Http\Request;
 class TestController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $tests = Test::all();
-        return view('test.index', compact('tests'));
+        $tests = Test::paginate(15);
+        return response()->json($tests);
     }
 
     /**

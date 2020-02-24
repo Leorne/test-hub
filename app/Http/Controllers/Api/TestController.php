@@ -9,7 +9,8 @@ use App\Models\Test;
 
 class TestController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $result = TestVersion::find(10);
         return response()->json($result);
     }

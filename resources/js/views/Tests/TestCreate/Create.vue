@@ -48,15 +48,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="card text-center">
-                    <div v-for="(question,index) in questions">
-                        <ShowQuestion :question="question"
-                                      :index="index"/>
-                    </div>
+                <div v-for="(question,index) in questions">
+                    <ShowQuestion :question="question"
+                                  :index="index"
+                                  class="my-2"/>
+                </div>
+                <div class=" border-top border-bottom my-2 card text-center">
                     <NewQuestionModal v-model="creatingQuestion" :questions="questions"/>
-                    <span class="btn btn-secondary" @click="creatingQuestion = true">New question.</span>
+                    <span class="btn btn-secondary" @click="creatingQuestion = true">Добавить вопрос</span>
                 </div>
                 <div class="card text-center my-3">
+                    <span class="btn btn-primary" @click="createTest">Создать тест</span>
                 </div>
             </form>
         </div>
@@ -76,6 +78,7 @@
         data() {
             return {
                 creatingQuestion: false,
+                testCreating: false,
                 testTitle: '',
                 testAbout: '',
                 full_result: false,
@@ -90,6 +93,9 @@
             setQuestions(newQuestions) {
                 this.questions = newQuestions;
             },
+            createTest() {
+                this.axios.post('/api/')
+            }
         }
     }
 </script>

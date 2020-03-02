@@ -1,5 +1,5 @@
 <template>
-    <b-modal v-model="value"
+    <b-modal v-model="showModal"
              size="xl"
              id="bv-modal-example">
         <div class="d-block text-center">
@@ -16,8 +16,12 @@
                 </div>
                 <div class="form-group">
                     <label for="points">Points for this question: {{ points }}/{{ maxPoints }}</label>
-                    <input id="points" type="range" :max="maxPoints" min="1" value="1" class="custom-range"
-                           v-model="points">
+                    <input v-model="points"
+                           :max="maxPoints"
+                           id="points"
+                           type="range"
+                           min="1"
+                           class="custom-range">
                 </div>
                 <div>
                     <component :is="currentTypeComponent"
@@ -38,9 +42,9 @@
 </template>
 
 <script>
-    import ChooseAnswers from "./Types/ChooseAnswers";
-    import InputNumber from "./Types/InputNumber";
-    import InputString from "./Types/InputString";
+    import ChooseAnswers from "./CreateTypes/ChooseAnswers";
+    import InputNumber from "./CreateTypes/InputNumber";
+    import InputString from "./CreateTypes/InputString";
 
     export default {
         components: {
@@ -68,29 +72,37 @@
                 typesComponents: [
                     {
                         value: 'ChooseAnswers',
-                        text: 'Choose answer'
+                        text: 'Выбор ответа'
                     },
                     {
                         value: 'InputString',
-                        text: 'Input string',
+                        text: 'Ответ строкой',
                     },
                     {
                         value: 'InputNumber',
-                        text: 'Input number',
+                        text: 'Ответ числом',
                     }
                 ],
 
                 body: '',
-                points: 0,
+                points: 1,
 
                 maxPoints: 10,
             }
         },
 
         computed: {
+            showModal: {
+                set(value) {
+                    this.$emit('input', value);
+                },
+                get() {
+                    return this.value;
+                }
+            },
             nextQuestionOptions() {
                 let options = [];
-                for(let key in this.questions){
+                for (let key in this.questions) {
                     options.push({
                         value: key,
                         text: this.questions[key].body
@@ -106,7 +118,8 @@
                 let newQuestion = {
                     body: this.body,
                     points: this.points,
-                    answers: newQuestionAnswers,
+                    type: newQuestionAnswers.type,
+                    answers: newQuestionAnswers.answers,
                 };
                 newQuestions.push(newQuestion);
                 this.$emit('set-questions', newQuestions);
@@ -115,7 +128,7 @@
 
             closeModal() {
                 this.body = '';
-                this.points = 0;
+                this.points = 1;
                 this.maxPoints = 10;
                 this.answer_data = {};
                 this.$emit('input', false)

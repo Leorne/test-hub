@@ -1,6 +1,7 @@
 <template>
     <div>
-        component
+        <component :is="componentType"
+                   :question="question"/>
     </div>
 </template>
 
@@ -28,10 +29,15 @@
         },
 
         data() {
-            return {}
+            return {
+            }
         },
 
-        computed: {},
+        computed: {
+            componentType() {
+                return this.question.type;
+            },
+        },
 
         methods: {}
     }

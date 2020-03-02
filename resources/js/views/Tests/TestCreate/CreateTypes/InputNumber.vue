@@ -57,9 +57,8 @@
                         answer: this.answer,
                         error_range: this.error_range,
                         next_question: this.next_question,
-                        type: 'InputNumber',
                     };
-                    this.$emit('set-answer', data);
+                    this.$emit('set-answer', {answers: data, type: 'InputNumber'});
                 } else {
                     setTimeout(() => this.errors = [], 10000);
                 }

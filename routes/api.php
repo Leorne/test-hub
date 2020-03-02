@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 Route::get('tests', 'TestController@index');
 Route::get('test/{test}', 'TestController@show');
+
+
+Route::post('/new', 'TestController@store')->name('test.store');
+
+
 Route::post('/test/start/{test}/{version}', 'TestHistoryController@store');
 Route::post('/test/end/{test}/{version}', 'TestHistoryController@update');
 Route::post('/test/question/pass', 'QuestionAnswersHistoryController@store');

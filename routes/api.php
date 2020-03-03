@@ -12,7 +12,7 @@ Route::get('tests', 'TestController@index');
 Route::get('test/{test}', 'TestController@show');
 
 
-Route::post('/new', 'TestController@store')->name('test.store');
+Route::post('/create-test', 'TestController@store')->name('test.store');
 
 
 Route::post('/test/start/{test}/{version}', 'TestHistoryController@store');

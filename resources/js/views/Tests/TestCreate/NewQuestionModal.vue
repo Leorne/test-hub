@@ -42,13 +42,13 @@
 </template>
 
 <script>
-    import ChooseAnswers from "./CreateTypes/ChooseAnswers";
+    import ChooseAnswer from "./CreateTypes/ChooseAnswer";
     import InputNumber from "./CreateTypes/InputNumber";
     import InputString from "./CreateTypes/InputString";
 
     export default {
         components: {
-            ChooseAnswers,
+            ChooseAnswer,
             InputNumber,
             InputString
         },
@@ -66,12 +66,12 @@
 
         data() {
             return {
-                currentTypeComponent: 'ChooseAnswers',
+                currentTypeComponent: 'ChooseAnswer',
                 errors: {},
 
                 typesComponents: [
                     {
-                        value: 'ChooseAnswers',
+                        value: 'ChooseAnswer',
                         text: 'Выбор ответа'
                     },
                     {

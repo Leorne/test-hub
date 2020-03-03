@@ -53,11 +53,11 @@
         methods: {
             answersIsReady() {
                 if (this.validate()) {
-                    let data = {
+                    let data = [{
                         answer: this.answer,
                         error_range: this.error_range,
                         next_question: this.next_question,
-                    };
+                    }];
                     this.$emit('set-answer', {answers: data, type: 'InputNumber'});
                 } else {
                     setTimeout(() => this.errors = [], 10000);

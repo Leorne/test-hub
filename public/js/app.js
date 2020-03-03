@@ -1891,8 +1891,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _NewQuestionModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewQuestionModal */ "./resources/js/views/Tests/TestCreate/NewQuestionModal.vue");
-/* harmony import */ var _ShowQuestion__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShowQuestion */ "./resources/js/views/Tests/TestCreate/ShowQuestion.vue");
+/* harmony import */ var _TestTags__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TestTags */ "./resources/js/views/Tests/TestCreate/TestTags.vue");
+/* harmony import */ var _NewQuestionModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewQuestionModal */ "./resources/js/views/Tests/TestCreate/NewQuestionModal.vue");
+/* harmony import */ var _ShowQuestion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShowQuestion */ "./resources/js/views/Tests/TestCreate/ShowQuestion.vue");
 //
 //
 //
@@ -1958,44 +1959,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    NewQuestionModal: _NewQuestionModal__WEBPACK_IMPORTED_MODULE_0__["default"],
-    ShowQuestion: _ShowQuestion__WEBPACK_IMPORTED_MODULE_1__["default"]
+    TestTags: _TestTags__WEBPACK_IMPORTED_MODULE_0__["default"],
+    NewQuestionModal: _NewQuestionModal__WEBPACK_IMPORTED_MODULE_1__["default"],
+    ShowQuestion: _ShowQuestion__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
       creatingQuestion: false,
       testCreating: false,
-      testTitle: '',
-      testAbout: '',
+      title: '',
+      about: '',
       full_result: false,
       timerEnable: false,
       timer: null,
-      testTags: {},
+      testTags: [],
       questions: []
     };
+  },
+  computed: {
+    formData: function formData() {
+      return {
+        title: this.title,
+        about: this.about,
+        timer: this.timer,
+        full_result: this.full_result,
+        tags: this.testTags,
+        questions: this.questions
+      };
+    }
   },
   methods: {
     setQuestions: function setQuestions(newQuestions) {
       this.questions = newQuestions;
     },
     createTest: function createTest() {
-      this.axios.post('/api/');
+      if (this.validated) {
+        axios.post('/api/create-test', this.formData).then(function (response) {// this.router.push('list');
+        })["catch"](function (error) {});
+      }
+    },
+    validated: function validated() {
+      var validated = true;
+      if (this.questions.length < 2 || this.questions.length > 100) validated = false;
+      return validated;
     }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2076,7 +2097,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.validate()) {
         this.$emit('set-answer', {
           answers: this.answers,
-          type: 'ChooseAnswers'
+          type: 'ChooseAnswer'
         });
       } else {
         setTimeout(function () {
@@ -2191,11 +2212,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (this.validate()) {
-        var data = {
+        var data = [{
           answer: this.answer,
           error_range: this.error_range,
           next_question: this.next_question
-        };
+        }];
         this.$emit('set-answer', {
           answers: data,
           type: 'InputNumber'
@@ -2361,7 +2382,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _CreateTypes_ChooseAnswers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreateTypes/ChooseAnswers */ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue");
+/* harmony import */ var _CreateTypes_ChooseAnswer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreateTypes/ChooseAnswer */ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue");
 /* harmony import */ var _CreateTypes_InputNumber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreateTypes/InputNumber */ "./resources/js/views/Tests/TestCreate/CreateTypes/InputNumber.vue");
 /* harmony import */ var _CreateTypes_InputString__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CreateTypes/InputString */ "./resources/js/views/Tests/TestCreate/CreateTypes/InputString.vue");
 //
@@ -2412,7 +2433,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    ChooseAnswers: _CreateTypes_ChooseAnswers__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ChooseAnswer: _CreateTypes_ChooseAnswer__WEBPACK_IMPORTED_MODULE_0__["default"],
     InputNumber: _CreateTypes_InputNumber__WEBPACK_IMPORTED_MODULE_1__["default"],
     InputString: _CreateTypes_InputString__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
@@ -2428,10 +2449,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      currentTypeComponent: 'ChooseAnswers',
+      currentTypeComponent: 'ChooseAnswer',
       errors: {},
       typesComponents: [{
-        value: 'ChooseAnswers',
+        value: 'ChooseAnswer',
         text: 'Выбор ответа'
       }, {
         value: 'InputString',
@@ -2501,7 +2522,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ShowTypes_ChooseAnswers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShowTypes/ChooseAnswers */ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue");
+/* harmony import */ var _ShowTypes_ChooseAnswer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ShowTypes/ChooseAnswer */ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue");
 /* harmony import */ var _ShowTypes_InputNumber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ShowTypes/InputNumber */ "./resources/js/views/Tests/TestCreate/ShowTypes/InputNumber.vue");
 /* harmony import */ var _ShowTypes_InputString__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShowTypes/InputString */ "./resources/js/views/Tests/TestCreate/ShowTypes/InputString.vue");
 //
@@ -2516,7 +2537,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    ChooseAnswers: _ShowTypes_ChooseAnswers__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ChooseAnswer: _ShowTypes_ChooseAnswer__WEBPACK_IMPORTED_MODULE_0__["default"],
     InputNumber: _ShowTypes_InputNumber__WEBPACK_IMPORTED_MODULE_1__["default"],
     InputString: _ShowTypes_InputString__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
@@ -2543,10 +2564,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2682,6 +2703,64 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {};
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    value: Array
+  },
+  computed: {
+    tags: {
+      get: function get() {
+        return this.value;
+      },
+      set: function set(newTags) {
+        this.$emit('input', newTags);
+      }
+    }
+  },
+  data: function data() {
+    return {
+      validTags: [],
+      invalidTags: [],
+      duplicateTags: []
+    };
+  },
+  methods: {
+    onTagState: function onTagState(valid, invalid, duplicate) {
+      this.validTags = valid;
+      this.invalidTags = invalid;
+      this.duplicateTags = duplicate;
+    },
+    validator: function validator(tag) {
+      return tag.length > 2 && tag.length < 16;
+    }
   }
 });
 
@@ -75295,250 +75374,270 @@ var render = function() {
       _c(
         "form",
         [
-          _c("div", { staticClass: "card p-3 m-2" }, [
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "title" } }, [_vm._v("Test title")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.testTitle,
-                    expression: "testTitle"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  name: "title",
-                  type: "text",
-                  id: "title",
-                  placeholder: "Enter test title"
-                },
-                domProps: { value: _vm.testTitle },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+          _c(
+            "div",
+            { staticClass: "card p-3 m-2" },
+            [
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "title" } }, [
+                  _vm._v("Test title")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.title,
+                      expression: "title"
                     }
-                    _vm.testTitle = $event.target.value
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    name: "title",
+                    type: "text",
+                    id: "title",
+                    placeholder: "Enter test title"
+                  },
+                  domProps: { value: _vm.title },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.title = $event.target.value
+                    }
                   }
+                }),
+                _vm._v(" "),
+                _c("small", { staticClass: "form-text text-muted" }, [
+                  _vm._v("This field is required.")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "about" } }, [
+                  _vm._v("About this test")
+                ]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.about,
+                      expression: "about"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    name: "about",
+                    id: "about",
+                    rows: "6",
+                    placeholder: "Here you can describe this test"
+                  },
+                  domProps: { value: _vm.about },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.about = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("TestTags", {
+                staticClass: "my-2",
+                model: {
+                  value: _vm.testTags,
+                  callback: function($$v) {
+                    _vm.testTags = $$v
+                  },
+                  expression: "testTags"
                 }
               }),
               _vm._v(" "),
-              _c("small", { staticClass: "form-text text-muted" }, [
-                _vm._v("This field is required.")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "about" } }, [
-                _vm._v("About this test")
-              ]),
-              _vm._v(" "),
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.testAbout,
-                    expression: "testAbout"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  name: "about",
-                  id: "about",
-                  rows: "6",
-                  placeholder: "Here you can describe this test"
-                },
-                domProps: { value: _vm.testAbout },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.testAbout = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-row text-center" }, [
-              _c("div", { staticClass: "col-5 border p-0 ml-1 mr-auto" }, [
-                _c(
-                  "div",
-                  { staticClass: "custom-control custom-checkbox m-1" },
-                  [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.full_result,
-                          expression: "full_result"
-                        }
-                      ],
-                      staticClass: "custom-control-input",
-                      attrs: { type: "checkbox", id: "detailInfo" },
-                      domProps: {
-                        checked: Array.isArray(_vm.full_result)
-                          ? _vm._i(_vm.full_result, null) > -1
-                          : _vm.full_result
-                      },
-                      on: {
-                        change: function($event) {
-                          var $$a = _vm.full_result,
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = null,
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 && (_vm.full_result = $$a.concat([$$v]))
+              _c("div", { staticClass: "form-row text-center" }, [
+                _c("div", { staticClass: "col-5 border p-0 ml-1 mr-auto" }, [
+                  _c(
+                    "div",
+                    { staticClass: "custom-control custom-checkbox m-1" },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.full_result,
+                            expression: "full_result"
+                          }
+                        ],
+                        staticClass: "custom-control-input",
+                        attrs: { type: "checkbox", id: "detailInfo" },
+                        domProps: {
+                          checked: Array.isArray(_vm.full_result)
+                            ? _vm._i(_vm.full_result, null) > -1
+                            : _vm.full_result
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.full_result,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 && (_vm.full_result = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (_vm.full_result = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
                             } else {
-                              $$i > -1 &&
-                                (_vm.full_result = $$a
-                                  .slice(0, $$i)
-                                  .concat($$a.slice($$i + 1)))
+                              _vm.full_result = $$c
                             }
-                          } else {
-                            _vm.full_result = $$c
                           }
                         }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "label",
-                      {
-                        staticClass: "custom-control-label",
-                        attrs: { for: "detailInfo" }
-                      },
-                      [
-                        _vm._v(
-                          "\n                                Test person can see the detailed result?\n                            "
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-5 border mr-1 ml-auto" }, [
-                _c(
-                  "div",
-                  { staticClass: "custom-control custom-checkbox m-1" },
-                  [
-                    _c("input", {
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "custom-control-label",
+                          attrs: { for: "detailInfo" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Test person can see the detailed result?\n                            "
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-5 border mr-1 ml-auto" }, [
+                  _c(
+                    "div",
+                    { staticClass: "custom-control custom-checkbox m-1" },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.timerEnable,
+                            expression: "timerEnable"
+                          }
+                        ],
+                        staticClass: "custom-control-input",
+                        attrs: {
+                          type: "checkbox",
+                          value: "",
+                          id: "timerEnable"
+                        },
+                        domProps: {
+                          checked: Array.isArray(_vm.timerEnable)
+                            ? _vm._i(_vm.timerEnable, "") > -1
+                            : _vm.timerEnable
+                        },
+                        on: {
+                          click: function($event) {
+                            _vm.timerEnable ? (_vm.timer = null) : ""
+                          },
+                          change: function($event) {
+                            var $$a = _vm.timerEnable,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = "",
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 && (_vm.timerEnable = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (_vm.timerEnable = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
+                            } else {
+                              _vm.timerEnable = $$c
+                            }
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "custom-control-label",
+                          attrs: { for: "timerEnable" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Timer enable?\n                            "
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
                       directives: [
                         {
-                          name: "model",
-                          rawName: "v-model",
+                          name: "show",
+                          rawName: "v-show",
                           value: _vm.timerEnable,
                           expression: "timerEnable"
                         }
                       ],
-                      staticClass: "custom-control-input",
-                      attrs: { type: "checkbox", value: "", id: "timerEnable" },
-                      domProps: {
-                        checked: Array.isArray(_vm.timerEnable)
-                          ? _vm._i(_vm.timerEnable, "") > -1
-                          : _vm.timerEnable
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.timerEnable ? (_vm.timer = null) : ""
+                      staticClass: "form-check m-1"
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.timer,
+                            expression: "timer"
+                          }
+                        ],
+                        attrs: {
+                          type: "number",
+                          min: "0",
+                          max: "180",
+                          name: "timer",
+                          id: "timer",
+                          step: "0.5"
                         },
-                        change: function($event) {
-                          var $$a = _vm.timerEnable,
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = "",
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 && (_vm.timerEnable = $$a.concat([$$v]))
-                            } else {
-                              $$i > -1 &&
-                                (_vm.timerEnable = $$a
-                                  .slice(0, $$i)
-                                  .concat($$a.slice($$i + 1)))
+                        domProps: { value: _vm.timer },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          } else {
-                            _vm.timerEnable = $$c
+                            _vm.timer = $event.target.value
                           }
                         }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "label",
-                      {
-                        staticClass: "custom-control-label",
-                        attrs: { for: "timerEnable" }
-                      },
-                      [
-                        _vm._v(
-                          "\n                                Timer enable?\n                            "
-                        )
-                      ]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.timerEnable,
-                        expression: "timerEnable"
-                      }
-                    ],
-                    staticClass: "form-check m-1"
-                  },
-                  [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.timer,
-                          expression: "timer"
-                        }
-                      ],
-                      attrs: {
-                        type: "number",
-                        min: "0",
-                        max: "180",
-                        name: "timer",
-                        id: "timer",
-                        step: "0.5"
-                      },
-                      domProps: { value: _vm.timer },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.timer = $event.target.value
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("small", { staticClass: "form-text text-muted" }, [
-                      _vm._v("180 minute is maximum.")
-                    ])
-                  ]
-                )
+                      }),
+                      _vm._v(" "),
+                      _c("small", { staticClass: "form-text text-muted" }, [
+                        _vm._v("180 minute is maximum. 10 is minimum")
+                      ])
+                    ]
+                  )
+                ])
               ])
-            ])
-          ]),
+            ],
+            1
+          ),
           _vm._v(" "),
           _vm._l(_vm.questions, function(question, index) {
             return _c(
@@ -75597,30 +75696,17 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "my-3" }, [
-      _c("label", [_vm._v("Test tags:")]),
-      _vm._v(" "),
-      _c("small", { staticClass: "form-text text-muted" }, [
-        _vm._v("Test must include at least one tag.")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=template&id=737e6ef8&":
-/*!****************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=template&id=737e6ef8& ***!
-  \****************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=template&id=1c61a38b&":
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=template&id=1c61a38b& ***!
+  \***************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -76373,10 +76459,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=template&id=234fe8d7&":
-/*!**************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=template&id=234fe8d7& ***!
-  \**************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=template&id=5399f1cc&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=template&id=5399f1cc& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -76597,6 +76683,59 @@ var render = function() {
         }),
         1
       )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=template&id=6ab6288f&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=template&id=6ab6288f& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("label", { attrs: { for: "tags-state-event" } }, [
+        _vm._v("Enter tags")
+      ]),
+      _vm._v(" "),
+      _c("b-form-tags", {
+        attrs: {
+          "input-id": "tags-state-event",
+          "tag-validator": _vm.validator,
+          placeholder: "Enter tags (3-15 characters) separated by space",
+          separator: " "
+        },
+        on: { "tag-state": _vm.onTagState },
+        model: {
+          value: _vm.tags,
+          callback: function($$v) {
+            _vm.tags = $$v
+          },
+          expression: "tags"
+        }
+      }),
+      _vm._v(" "),
+      _c("small", { staticClass: "form-text text-muted" }, [
+        _vm._v("Test must include at least one tag.")
+      ])
     ],
     1
   )
@@ -93015,17 +93154,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue":
-/*!***************************************************************************!*\
-  !*** ./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue ***!
-  \***************************************************************************/
+/***/ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue":
+/*!**************************************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue ***!
+  \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ChooseAnswers_vue_vue_type_template_id_737e6ef8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChooseAnswers.vue?vue&type=template&id=737e6ef8& */ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=template&id=737e6ef8&");
-/* harmony import */ var _ChooseAnswers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChooseAnswers.vue?vue&type=script&lang=js& */ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=script&lang=js&");
+/* harmony import */ var _ChooseAnswer_vue_vue_type_template_id_1c61a38b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChooseAnswer.vue?vue&type=template&id=1c61a38b& */ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=template&id=1c61a38b&");
+/* harmony import */ var _ChooseAnswer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChooseAnswer.vue?vue&type=script&lang=js& */ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -93035,9 +93174,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ChooseAnswers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ChooseAnswers_vue_vue_type_template_id_737e6ef8___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ChooseAnswers_vue_vue_type_template_id_737e6ef8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _ChooseAnswer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ChooseAnswer_vue_vue_type_template_id_1c61a38b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ChooseAnswer_vue_vue_type_template_id_1c61a38b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -93047,38 +93186,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue"
+component.options.__file = "resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************!*\
-  !*** ./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************/
+/***/ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChooseAnswers.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChooseAnswer.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=template&id=737e6ef8&":
-/*!**********************************************************************************************************!*\
-  !*** ./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=template&id=737e6ef8& ***!
-  \**********************************************************************************************************/
+/***/ "./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=template&id=1c61a38b&":
+/*!*********************************************************************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=template&id=1c61a38b& ***!
+  \*********************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_template_id_737e6ef8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChooseAnswers.vue?vue&type=template&id=737e6ef8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswers.vue?vue&type=template&id=737e6ef8&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_template_id_737e6ef8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_template_id_1c61a38b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChooseAnswer.vue?vue&type=template&id=1c61a38b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/CreateTypes/ChooseAnswer.vue?vue&type=template&id=1c61a38b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_template_id_1c61a38b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_template_id_737e6ef8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_template_id_1c61a38b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -93360,17 +93499,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue":
-/*!*************************************************************************!*\
-  !*** ./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue ***!
-  \*************************************************************************/
+/***/ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue":
+/*!************************************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue ***!
+  \************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ChooseAnswers_vue_vue_type_template_id_234fe8d7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChooseAnswers.vue?vue&type=template&id=234fe8d7& */ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=template&id=234fe8d7&");
-/* harmony import */ var _ChooseAnswers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChooseAnswers.vue?vue&type=script&lang=js& */ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=script&lang=js&");
+/* harmony import */ var _ChooseAnswer_vue_vue_type_template_id_5399f1cc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChooseAnswer.vue?vue&type=template&id=5399f1cc& */ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=template&id=5399f1cc&");
+/* harmony import */ var _ChooseAnswer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChooseAnswer.vue?vue&type=script&lang=js& */ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -93380,9 +93519,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ChooseAnswers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ChooseAnswers_vue_vue_type_template_id_234fe8d7___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ChooseAnswers_vue_vue_type_template_id_234fe8d7___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _ChooseAnswer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ChooseAnswer_vue_vue_type_template_id_5399f1cc___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ChooseAnswer_vue_vue_type_template_id_5399f1cc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -93392,38 +93531,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue"
+component.options.__file = "resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************!*\
-  !*** ./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************/
+/***/ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChooseAnswers.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChooseAnswer.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=template&id=234fe8d7&":
-/*!********************************************************************************************************!*\
-  !*** ./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=template&id=234fe8d7& ***!
-  \********************************************************************************************************/
+/***/ "./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=template&id=5399f1cc&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=template&id=5399f1cc& ***!
+  \*******************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_template_id_234fe8d7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChooseAnswers.vue?vue&type=template&id=234fe8d7& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswers.vue?vue&type=template&id=234fe8d7&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_template_id_234fe8d7___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_template_id_5399f1cc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./ChooseAnswer.vue?vue&type=template&id=5399f1cc& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/ShowTypes/ChooseAnswer.vue?vue&type=template&id=5399f1cc&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_template_id_5399f1cc___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswers_vue_vue_type_template_id_234fe8d7___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChooseAnswer_vue_vue_type_template_id_5399f1cc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -93562,6 +93701,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InputString_vue_vue_type_template_id_27c8d8b4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InputString_vue_vue_type_template_id_27c8d8b4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/Tests/TestCreate/TestTags.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/TestTags.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TestTags_vue_vue_type_template_id_6ab6288f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TestTags.vue?vue&type=template&id=6ab6288f& */ "./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=template&id=6ab6288f&");
+/* harmony import */ var _TestTags_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TestTags.vue?vue&type=script&lang=js& */ "./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TestTags_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TestTags_vue_vue_type_template_id_6ab6288f___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TestTags_vue_vue_type_template_id_6ab6288f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/Tests/TestCreate/TestTags.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TestTags_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./TestTags.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TestTags_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=template&id=6ab6288f&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=template&id=6ab6288f& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TestTags_vue_vue_type_template_id_6ab6288f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./TestTags.vue?vue&type=template&id=6ab6288f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Tests/TestCreate/TestTags.vue?vue&type=template&id=6ab6288f&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TestTags_vue_vue_type_template_id_6ab6288f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TestTags_vue_vue_type_template_id_6ab6288f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -6,13 +6,13 @@
 </template>
 
 <script>
-    import ChooseAnswers from './ShowTypes/ChooseAnswers';
+    import ChooseAnswer from './ShowTypes/ChooseAnswer';
     import InputNumber from './ShowTypes/InputNumber';
     import InputString from './ShowTypes/InputString';
 
     export default {
         components: {
-            ChooseAnswers,
+            ChooseAnswer,
             InputNumber,
             InputString,
         },

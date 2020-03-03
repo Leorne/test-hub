@@ -19,7 +19,7 @@ class CreateTestsTable extends Migration
             $table->string('title');
             $table->text('about')->nullable();
             $table->integer('timer')->nullable();
-            $table->boolean('full_result')->nullable();
+            $table->boolean('full_result')->default(false)->nullable();
             $table->timestamps();
         });
     }

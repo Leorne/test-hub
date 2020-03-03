@@ -74,7 +74,7 @@
 
             answersIsReady() {
                 if (this.validate()) {
-                    this.$emit('set-answer', {answers: this.answers, type: 'ChooseAnswers'});
+                    this.$emit('set-answer', {answers: this.answers, type: 'ChooseAnswer'});
                 } else {
                     setTimeout(() => this.errors = [], 10000);
                 }

@@ -6,19 +6,17 @@
                     <div class="form-group">
                         <label for="title">Test title</label>
                         <input name="title" type="text" class="form-control" id="title"
-                               placeholder="Enter test title" v-model="testTitle">
+                               placeholder="Enter test title" v-model="title">
                         <small class="form-text text-muted">This field is required.</small>
                     </div>
                     <div class="form-group">
                         <label for="about">About this test</label>
                         <textarea name="about" class="form-control" id="about" rows="6"
-                                  placeholder="Here you can describe this test" v-model="testAbout">
+                                  placeholder="Here you can describe this test" v-model="about">
                             </textarea>
                     </div>
-                    <div class="my-3">
-                        <label>Test tags:</label>
-                        <small class="form-text text-muted">Test must include at least one tag.</small>
-                    </div>
+
+                    <TestTags v-model="testTags" class="my-2"/>
 
                     <div class="form-row text-center">
                         <div class="col-5 border p-0 ml-1 mr-auto">
@@ -43,7 +41,7 @@
                             <div class="form-check m-1" v-show="timerEnable">
                                 <input type="number" min="0" max="180" name="timer" id="timer" step="0.5"
                                        v-model="timer">
-                                <small class="form-text text-muted">180 minute is maximum.</small>
+                                <small class="form-text text-muted">180 minute is maximum. 10 is minimum</small>
                             </div>
                         </div>
                     </div>
@@ -66,26 +64,41 @@
 </template>
 
 <script>
+    import TestTags from "./TestTags";
     import NewQuestionModal from "./NewQuestionModal";
     import ShowQuestion from "./ShowQuestion";
 
     export default {
         components: {
+            TestTags,
             NewQuestionModal,
-            ShowQuestion
+            ShowQuestion,
         },
 
         data() {
             return {
                 creatingQuestion: false,
                 testCreating: false,
-                testTitle: '',
-                testAbout: '',
+                title: '',
+                about: '',
                 full_result: false,
                 timerEnable: false,
                 timer: null,
-                testTags: {},
+                testTags: [],
                 questions: [],
+            }
+        },
+
+        computed: {
+            formData(){
+                return {
+                    title: this.title,
+                    about: this.about,
+                    timer: this.timer,
+                    full_result: this.full_result,
+                    tags: this.testTags,
+                    questions: this.questions
+                }
             }
         },
 
@@ -94,7 +107,19 @@
                 this.questions = newQuestions;
             },
             createTest() {
-                this.axios.post('/api/')
+                if(this.validated){
+                    axios.post('/api/create-test', this.formData).then(response => {
+                        // this.router.push('list');
+                    }).catch(error => {
+
+                    });
+                }
+            },
+            validated(){
+                let validated = true;
+                if(this.questions.length < 2 || this.questions.length > 100)
+                validated = false;
+                return validated;
             }
         }
     }
